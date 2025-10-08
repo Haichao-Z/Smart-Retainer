@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "attitude_fusion.h": "c",
+        "ble_imu_service.h": "c",
+        "log.h": "c",
+        "imu_driver.h": "c"
+    }
+}

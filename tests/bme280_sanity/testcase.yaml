@@ -1,0 +1,6 @@
+tests:
+  ese5180.bme280.sanity_check:
+    platform_allow:
+      - nrf7002dk_nrf5340_cpuapp
+    tags: sensor bme280
+    harness: ztest

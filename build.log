@@ -1,0 +1,2042 @@
+-- west build: generating a build system
+Loading Zephyr module(s) (Zephyr base): sysbuild_default
+-- Found Python3: /opt/nordic/ncs/toolchains/ef4fc6722e/opt/python@3.12/bin/python3.12 (found suitable version "3.12.4", minimum required is "3.10") found components: Interpreter
+-- Cache files will be written to: /Users/zhaohaichao/Library/Caches/zephyr
+-- Found west (found suitable version "1.2.0", minimum required is "0.14.0")
+-- Board: nrf7002dk, qualifiers: nrf5340/cpuapp
+Parsing /opt/nordic/ncs/v3.0.2/zephyr/share/sysbuild/Kconfig
+Loaded configuration '/Users/zhaohaichao/Desktop/blinky/build/_sysbuild/empty.conf'
+Merged configuration '/Users/zhaohaichao/Desktop/blinky/build/_sysbuild/empty.conf'
+Configuration saved to '/Users/zhaohaichao/Desktop/blinky/build/zephyr/.config'
+Kconfig header saved to '/Users/zhaohaichao/Desktop/blinky/build/_sysbuild/autoconf.h'
+-- 
+   ****************************
+   * Running CMake for blinky *
+   ****************************
+
+Loading Zephyr default modules (Zephyr base).
+-- Application: /Users/zhaohaichao/Desktop/blinky
+-- CMake version: 4.0.1
+-- Found Python3: /opt/nordic/ncs/toolchains/ef4fc6722e/bin/python (found suitable version "3.12.4", minimum required is "3.10") found components: Interpreter
+-- Cache files will be written to: /Users/zhaohaichao/Library/Caches/zephyr
+-- Zephyr version: 4.0.99 (/opt/nordic/ncs/v3.0.2/zephyr)
+-- Found west (found suitable version "1.2.0", minimum required is "0.14.0")
+-- Board: nrf7002dk, qualifiers: nrf5340/cpuapp
+-- Found host-tools: zephyr 0.17.0 (/opt/nordic/ncs/toolchains/ef4fc6722e/opt/zephyr-sdk)
+-- Found toolchain: zephyr 0.17.0 (/opt/nordic/ncs/toolchains/ef4fc6722e/opt/zephyr-sdk)
+-- Found Dtc: /usr/local/bin/dtc (found suitable version "1.7.2", minimum required is "1.4.6")
+-- Found BOARD.dts: /opt/nordic/ncs/v3.0.2/zephyr/boards/nordic/nrf7002dk/nrf7002dk_nrf5340_cpuapp.dts
+-- Found devicetree overlay: /Users/zhaohaichao/Desktop/blinky/boards/nrf7002dk_nrf5340_cpuapp.overlay
+-- Generated zephyr.dts: /Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/zephyr.dts
+-- Generated pickled edt: /Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/edt.pickle
+-- Generated zephyr.dts: /Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/zephyr.dts
+-- Generated devicetree_generated.h: /Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/include/generated/zephyr/devicetree_generated.h
+-- Including generated dts.cmake file: /Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/dts.cmake
+Parsing /Users/zhaohaichao/Desktop/blinky/Kconfig
+Loaded configuration '/opt/nordic/ncs/v3.0.2/zephyr/boards/nordic/nrf7002dk/nrf7002dk_nrf5340_cpuapp_defconfig'
+Merged configuration '/Users/zhaohaichao/Desktop/blinky/prj.conf'
+Merged configuration '/Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/.config.sysbuild'
+Configuration saved to '/Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/.config'
+Kconfig header saved to '/Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/include/generated/zephyr/autoconf.h'
+-- Found GnuLd: /opt/nordic/ncs/toolchains/ef4fc6722e/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/bin/ld.bfd (found version "2.38")
+-- The C compiler identification is GNU 12.2.0
+-- The CXX compiler identification is GNU 12.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/nordic/ncs/toolchains/ef4fc6722e/opt/zephyr-sdk/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc
+=========== Generating psa_crypto_config ===============
+Backup: CONFIG_MBEDTLS_PSA_CRYPTO_SPM: False
+Backup: CONFIG_MBEDTLS_PSA_CRYPTO_C: True
+Backup: CONFIG_MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER: False
+Backup: CONFIG_MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT: False
+Backup: CONFIG_MBEDTLS_THREADING: False
+Backup: CONFIG_MBEDTLS_THREADING_ALT: True
+=========== Checkpoint: backup ===============
+Restore: CONFIG_MBEDTLS_PSA_CRYPTO_SPM: False
+Restore: CONFIG_MBEDTLS_PSA_CRYPTO_C: True
+Restore: CONFIG_MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER: False
+Restore: CONFIG_MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT: False
+Restore: CONFIG_MBEDTLS_THREADING: False
+Restore: CONFIG_MBEDTLS_THREADING_ALT: True
+=========== End psa_crypto_config ===============
+=========== Generating psa_crypto_library_config ===============
+Backup: CONFIG_MBEDTLS_PSA_CRYPTO_C: True
+Backup: CONFIG_MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER: False
+Backup: CONFIG_MBEDTLS_PSA_CRYPTO_SPM: False
+Backup: CONFIG_MBEDTLS_USE_PSA_CRYPTO: True
+Backup: CONFIG_MBEDTLS_PLATFORM_PRINTF_ALT: False
+Backup: CONFIG_MBEDTLS_THREADING: False
+Backup: CONFIG_MBEDTLS_THREADING_ALT: True
+=========== Checkpoint: backup ===============
+Restore: CONFIG_MBEDTLS_PSA_CRYPTO_C: True
+Restore: CONFIG_MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER: False
+Restore: CONFIG_MBEDTLS_PSA_CRYPTO_SPM: False
+Restore: CONFIG_MBEDTLS_USE_PSA_CRYPTO: True
+Restore: CONFIG_MBEDTLS_PLATFORM_PRINTF_ALT: False
+Restore: CONFIG_MBEDTLS_THREADING: False
+Restore: CONFIG_MBEDTLS_THREADING_ALT: True
+=========== End psa_crypto_library_config ===============
+-- libmetal version: 1.7.0 (/Users/zhaohaichao/Desktop/blinky)
+-- Build type:  
+-- Host:    Darwin/x86_64
+-- Target:  Generic/arm
+-- Machine: arm
+-- Vendor: none
+-- Looking for include file stdatomic.h
+-- Looking for include file stdatomic.h - found
+-- open-amp version: 1.7.0 (/opt/nordic/ncs/v3.0.2/modules/lib/open-amp/open-amp)
+-- Host:    Darwin/x86_64
+-- Target:  Generic/arm
+-- Machine: arm
+-- C_FLAGS :  -Wall -Wextra
+-- Looking for include file fcntl.h
+-- Looking for include file fcntl.h - found
+-- Using ccache: /usr/local/bin/ccache
+CMake Warning at /opt/nordic/ncs/v3.0.2/zephyr/CMakeLists.txt:2180 (message):
+  __ASSERT() statements are globally ENABLED
+
+
+-- Configuring done (23.0s)
+-- Generating done (1.3s)
+-- Build files have been written to: /Users/zhaohaichao/Desktop/blinky/build/blinky
+-- Configuring done (37.8s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/zhaohaichao/Desktop/blinky/build
+-- west build: building application
+[1/10] Creating directories for 'blinky'
+[2/10] No download step for 'blinky'
+[3/10] No update step for 'blinky'
+[4/10] No patch step for 'blinky'
+[5/10] No configure step for 'blinky'
+[5/10] Performing build step for 'blinky'
+[1/296] Preparing syscall dependency handling
+
+[2/296] Generating ../../zephyr/include/generated/ncs_commit.h
+[3/296] Generating ../../zephyr/include/generated/zephyr_commit.h
+[4/296] Generating misc/generated/syscalls_subdirs.trigger
+[5/296] Generating ../../zephyr/include/generated/ncs_version.h
+[6/296] Generating include/generated/zephyr/version.h
+-- Zephyr version: 4.0.99 (/opt/nordic/ncs/v3.0.2/zephyr), build: v4.0.99-ncs1-2
+[7/296] Generating misc/generated/syscalls.json, misc/generated/struct_tags.json
+[8/296] Generating include/generated/device-api-sections.ld, include/generated/device-api-sections.cmake
+[9/296] Generating include/generated/zephyr/syscall_dispatch.c, include/generated/zephyr/syscall_exports_llext.c, syscall_weakdefs_llext.c, include/generated/zephyr/syscall_list.h
+[10/296] Generating include/generated/zephyr/kobj-types-enum.h, include/generated/zephyr/otype-to-str.h, include/generated/zephyr/otype-to-size.h
+[11/296] Generating include/generated/zephyr/driver-validation.h
+[12/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/asn1write.c.obj
+[13/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/base64.c.obj
+[14/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/bignum.c.obj
+[15/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/block_cipher.c.obj
+[16/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/oid.c.obj
+[17/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/asn1parse.c.obj
+[18/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/bignum_core.c.obj
+[19/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/nist_kw.c.obj
+[20/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/nrf_security_utils.dir/utils/nrf_security_mutexes.c.obj
+[21/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/nrf_security_utils.dir/utils/nrf_security_events.c.obj
+[22/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_ecdh.c.obj
+[23/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_ecdsa.c.obj
+[24/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_spake2p.c.obj
+[25/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_helpers.c.obj
+[26/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/version.c.obj
+[27/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/padlock.c.obj
+[28/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_srp.c.obj
+[29/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_rsa.c.obj
+[30/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_ec_keys.c.obj
+[31/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto_base.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/constant_time.c.obj
+[32/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_jpake.c.obj
+[33/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_cipher.c.obj
+[34/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_hash.c.obj
+[35/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/library/platform.c.obj
+[36/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/library/platform_util.c.obj
+[37/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_mac.c.obj
+[38/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/library/psa_crypto_client.c.obj
+[39/296] Building C object modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/CMakeFiles/oberon_psa_driver.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/oberon/drivers/oberon_wpa3_sae.c.obj
+[40/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pem.c.obj
+[41/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/memory_buffer_alloc.c.obj
+[42/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pkcs5.c.obj
+[43/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pkcs12.c.obj
+[44/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pkparse.c.obj
+[45/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/library/psa_crypto_storage.c.obj
+[46/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/dhm.c.obj
+[47/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/library/psa_crypto.c.obj
+[48/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/library/psa_crypto_slot_management.c.obj
+[49/296] Building C object modules/nrf/subsys/nrf_security/src/core/nrf_oberon/CMakeFiles/oberon_psa_core.dir/opt/nordic/ncs/v3.0.2/nrf/subsys/nrf_security/src/psa_crypto_driver_wrappers.c.obj
+[50/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pkwrite.c.obj
+[51/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/cipher.c.obj
+[52/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/md.c.obj
+[53/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pk_ecc.c.obj
+[54/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/psa_util.c.obj
+[55/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/pk_wrap.c.obj
+[56/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/mbedtls/library/cipher_wrap.c.obj
+[57/296] Building C object modules/nrf/subsys/nrf_security/src/CMakeFiles/mbedcrypto.dir/opt/nordic/ncs/v3.0.2/modules/crypto/oberon-psa-crypto/programs/ssl/library/pk.c.obj
+[58/296] Building C object zephyr/CMakeFiles/offsets.dir/arch/arm/core/offsets/offsets.c.obj
+[59/296] Linking C static library modules/nrf/subsys/nrf_security/src/libnrf_security_utils.a
+[60/296] Linking C static library modules/nrf/subsys/nrf_security/src/libmbedcrypto_base.a
+[61/296] Linking C static library modules/nrf/subsys/nrf_security/src/drivers/nrf_oberon/liboberon_psa_driver.a
+[62/296] Linking C static library modules/nrf/subsys/nrf_security/src/core/nrf_oberon/liboberon_psa_core.a
+[63/296] Linking C static library modules/nrf/subsys/nrf_security/src/libmbedcrypto.a
+[64/296] Generating include/generated/zephyr/offsets.h
+[65/296] Building C object zephyr/arch/common/CMakeFiles/isr_tables.dir/isr_tables.c.obj
+[66/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/heap/heap.c.obj
+[67/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/cbprintf_packaged.c.obj
+[68/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/printk.c.obj
+[69/296] Building C object CMakeFiles/app.dir/src/imu_driver.c.obj
+In file included from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:11,
+                 from /Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:7:
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c: In function 'imu_driver_read':
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |             ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:32: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |                            ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:47: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |                                           ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |             ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:31: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |                           ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:45: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |                                         ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+In file included from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:34,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util.h:17,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/atomic.h:18,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/kernel_includes.h:25,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/kernel.h:17,
+                 from /Users/zhaohaichao/Desktop/blinky/src/imu_driver.h:12,
+                 from /Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:6:
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |             ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:32: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |                            ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:47: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |                                           ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |             ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:31: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |                           ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:45: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |                                         ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |             ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:32: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |                            ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:119:47: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  119 |             data->accel_x, data->accel_y, data->accel_z,
+      |                                           ~~~~^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |             ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:31: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |                           ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:120:45: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  120 |             data->gyro_x, data->gyro_y, data->gyro_z);
+      |                                         ~~~~^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/imu_driver.c:118:5: note: in expansion of macro 'LOG_DBG'
+  118 |     LOG_DBG("IMU data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+      |     ^~~~~~~
+[70/296] Building C object CMakeFiles/app.dir/src/attitude_fusion.c.obj
+/Users/zhaohaichao/Desktop/blinky/src/attitude_fusion.c: In function 'quaternion_to_euler':
+/Users/zhaohaichao/Desktop/blinky/src/attitude_fusion.c:188:39: warning: implicit conversion from 'float' to 'double' to match other operand of binary expression [-Wdouble-promotion]
+  188 |         euler->pitch = copysignf(M_PI / 2.0f, sinp);
+      |                                       ^
+[71/296] Building C object CMakeFiles/app.dir/src/ble_imu_service.c.obj
+[72/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/sem.c.obj
+[73/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/thread_entry.c.obj
+[74/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/assert.c.obj
+[75/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/timeutil.c.obj
+[76/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/cbprintf.c.obj
+[77/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/hex.c.obj
+[78/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/rb.c.obj
+[79/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/mpsc_pbuf.c.obj
+[80/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/dec.c.obj
+[81/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/bitarray.c.obj
+[82/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/os/cbprintf_complete.c.obj
+[83/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/last_section_id.c.obj
+[84/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/notify.c.obj
+[85/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/ipc/ipc_service/lib/ipc_static_vrings.c.obj
+[86/296] Building C object zephyr/CMakeFiles/zephyr.dir/misc/generated/configs.c.obj
+[87/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/ipc/ipc_service/ipc_service.c.obj
+[88/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/log_core.c.obj
+[89/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/log_cache.c.obj
+[90/296] Building C object zephyr/CMakeFiles/zephyr.dir/lib/utils/onoff.c.obj
+[91/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/log_mgmt.c.obj
+[92/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/ipc/ipc_service/lib/ipc_rpmsg.c.obj
+[93/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/log_output.c.obj
+[94/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/backends/log_backend_uart.c.obj
+[95/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/mem_mgmt/mem_attr.c.obj
+[96/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/nrf/lib/boot_banner/banner.c.obj
+[97/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/nrf/subsys/bluetooth/host_extensions/host_extensions.c.obj
+[98/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/ipc/ipc_service/backends/ipc_rpmsg_static_vrings.c.obj
+[99/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/nrfxlib/crypto/nrf_cc312_platform/src/nrf_cc3xx_platform_mutex_zephyr.c.obj
+[100/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/nrf/subsys/partition_manager/flash_map_partition_manager.c.obj
+[101/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/modules/hal/st/sensor/stmemsc/lsm6dso_STdC/driver/lsm6dso_reg.c.obj
+[102/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/nrf/subsys/bluetooth/hci_vs_sdc.c.obj
+[103/296] Building C object zephyr/CMakeFiles/zephyr.dir/opt/nordic/ncs/v3.0.2/nrfxlib/crypto/nrf_cc312_platform/src/nrf_cc3xx_platform_abort_zephyr.c.obj
+[104/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/tracing/tracing_none.c.obj
+[105/296] Building C object zephyr/arch/common/CMakeFiles/arch__common.dir/sw_isr_common.c.obj
+[106/296] Building C object zephyr/CMakeFiles/zephyr.dir/subsys/logging/log_msg.c.obj
+[107/296] Building C object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/fatal.c.obj
+[108/296] Building C object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/nmi.c.obj
+[109/296] Building ASM object zephyr/arch/arch/arm/core/CMakeFiles/arch__arm__core.dir/nmi_on_reset.S.obj
+[110/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/exc_exit.c.obj
+[111/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/fault.c.obj
+[112/296] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/fault_s.S.obj
+[113/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/fpu.c.obj
+[114/296] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/reset.S.obj
+[115/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/scb.c.obj
+[116/296] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/vector_table.S.obj
+[117/296] Building ASM object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/swap_helper.S.obj
+[118/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/irq_manage.c.obj
+[119/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/thread_abort.c.obj
+[120/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/prep_c.c.obj
+[121/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/thread.c.obj
+[122/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/cpu_idle.c.obj
+[123/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/irq_init.c.obj
+[124/296] Building C object zephyr/arch/arch/arm/core/cortex_m/cmse/CMakeFiles/arch__arm__core__cortex_m__cmse.dir/arm_core_cmse.c.obj
+[125/296] Building C object zephyr/arch/arch/arm/core/mpu/CMakeFiles/arch__arm__core__mpu.dir/arm_core_mpu.c.obj
+[126/296] Building C object zephyr/arch/arch/arm/core/mpu/CMakeFiles/arch__arm__core__mpu.dir/arm_mpu.c.obj
+[127/296] Building C object zephyr/lib/libc/newlib/CMakeFiles/lib__libc__newlib.dir/libc-hooks.c.obj
+[128/296] Building C object zephyr/arch/arch/arm/core/cortex_m/CMakeFiles/arch__arm__core__cortex_m.dir/isr_wrapper.c.obj
+[129/296] Building C object zephyr/lib/libc/common/CMakeFiles/lib__libc__common.dir/source/stdlib/abort.c.obj
+[130/296] Building C object zephyr/arch/arch/arm/core/mpu/CMakeFiles/arch__arm__core__mpu.dir/arm_mpu_regions.c.obj
+[131/296] Linking C static library zephyr/arch/common/libisr_tables.a
+[132/296] Building C object zephyr/lib/net_buf/CMakeFiles/lib__net_buf.dir/buf.c.obj
+[133/296] Building C object zephyr/lib/net_buf/CMakeFiles/lib__net_buf.dir/buf_simple.c.obj
+[134/296] Building C object zephyr/soc/soc/nrf5340/CMakeFiles/soc__nordic.dir/validate_base_addresses.c.obj
+[135/296] Building C object zephyr/soc/soc/nrf5340/CMakeFiles/soc__nordic.dir/validate_binding_headers.c.obj
+[136/296] Building C object zephyr/soc/soc/nrf5340/CMakeFiles/soc__nordic.dir/validate_enabled_instances.c.obj
+[137/296] Building C object zephyr/soc/soc/nrf5340/CMakeFiles/soc__nordic.dir/nrf53/nrf53_cpunet_mgmt.c.obj
+[138/296] Building C object zephyr/soc/soc/nrf5340/CMakeFiles/soc__nordic.dir/nrf53/soc.c.obj
+[139/296] Building C object zephyr/soc/soc/nrf5340/CMakeFiles/soc__nordic.dir/common/reboot.c.obj
+[140/296] Building C object zephyr/subsys/random/CMakeFiles/subsys__random.dir/random_entropy_device.c.obj
+[141/296] Building C object zephyr/subsys/random/CMakeFiles/subsys__random.dir/random_xoshiro128.c.obj
+[142/296] Building C object zephyr/subsys/bluetooth/common/CMakeFiles/subsys__bluetooth__common.dir/addr.c.obj
+[143/296] Building C object zephyr/subsys/bluetooth/common/CMakeFiles/subsys__bluetooth__common.dir/dummy.c.obj
+[144/296] Building C object zephyr/subsys/bluetooth/common/CMakeFiles/subsys__bluetooth__common.dir/bt_str.c.obj
+[145/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/long_wq.c.obj
+[146/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/uuid.c.obj
+[147/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/addr.c.obj
+[148/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/buf.c.obj
+[149/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/data.c.obj
+[150/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/hci_core.c.obj
+[151/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/hci_common.c.obj
+[152/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/id.c.obj
+[153/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/adv.c.obj
+[154/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/crypto_psa.c.obj
+[155/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/conn.c.obj
+[156/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/l2cap.c.obj
+[157/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/att.c.obj
+[158/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/smp_null.c.obj
+[159/296] Building C object zephyr/subsys/bluetooth/host/CMakeFiles/subsys__bluetooth__host.dir/gatt.c.obj
+[160/296] Building C object zephyr/drivers/bluetooth/CMakeFiles/drivers__bluetooth.dir/hci/ipc.c.obj
+[161/296] Building C object zephyr/drivers/clock_control/CMakeFiles/drivers__clock_control.dir/clock_control_nrf.c.obj
+[162/296] Building C object zephyr/drivers/bluetooth/CMakeFiles/drivers__bluetooth.dir/hci/nrf53_support.c.obj
+[163/296] Building C object zephyr/drivers/console/CMakeFiles/drivers__console.dir/uart_console.c.obj
+[164/296] Building C object zephyr/drivers/entropy/CMakeFiles/drivers__entropy.dir/entropy_bt_hci.c.obj
+[165/296] Building C object zephyr/drivers/entropy/CMakeFiles/drivers__entropy.dir/opt/nordic/ncs/v3.0.2/nrf/drivers/entropy/entropy_cc3xx.c.obj
+[166/296] Building C object zephyr/drivers/i2c/CMakeFiles/drivers__i2c.dir/i2c_common.c.obj
+[167/296] Building C object zephyr/drivers/gpio/CMakeFiles/drivers__gpio.dir/gpio_nrfx.c.obj
+[168/296] Building C object zephyr/drivers/i2c/CMakeFiles/drivers__i2c.dir/i2c_nrfx_twim.c.obj
+[169/296] Building C object zephyr/drivers/i2c/CMakeFiles/drivers__i2c.dir/i2c_nrfx_twim_common.c.obj
+[170/296] Building C object zephyr/drivers/mbox/CMakeFiles/drivers__mbox.dir/mbox_nrfx_ipc.c.obj
+[171/296] Building C object zephyr/drivers/pinctrl/CMakeFiles/drivers__pinctrl.dir/common.c.obj
+[172/296] Building C object zephyr/drivers/pinctrl/CMakeFiles/drivers__pinctrl.dir/pinctrl_nrf.c.obj
+[173/296] Building C object zephyr/drivers/sensor/st/stmemsc/CMakeFiles/drivers__sensor__st__stmemsc.dir/stmemsc_i2c.c.obj
+[174/296] Building C object zephyr/drivers/sensor/st/stmemsc/CMakeFiles/drivers__sensor__st__stmemsc.dir/stmemsc_mdelay.c.obj
+[175/296] Building C object zephyr/drivers/sensor/st/lsm6dso/CMakeFiles/drivers__sensor__st__lsm6dso.dir/lsm6dso.c.obj
+[176/296] Building C object zephyr/drivers/serial/CMakeFiles/drivers__serial.dir/uart_nrfx_uarte.c.obj
+[177/296] Building C object zephyr/drivers/timer/CMakeFiles/drivers__timer.dir/sys_clock_init.c.obj
+[178/296] Building C object zephyr/drivers/timer/CMakeFiles/drivers__timer.dir/nrf_rtc_timer.c.obj
+[179/296] Building C object modules/nrf/subsys/nrf_security/src/zephyr/CMakeFiles/mbedtls_zephyr.dir/mbedtls_heap.c.obj
+[180/296] Building C object modules/nrf/subsys/nrf_security/src/zephyr/CMakeFiles/mbedtls_zephyr.dir/psa_crypto_init.c.obj
+[181/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/mdk/system_nrf5340_application.c.obj
+[182/296] Building C object modules/nrf/drivers/hw_cc3xx/CMakeFiles/..__nrf__drivers__hw_cc3xx.dir/hw_cc3xx.c.obj
+[183/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/nrfx_glue.c.obj
+[184/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/helpers/nrfx_flag32_allocator.c.obj
+[185/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/helpers/nrfx_ram_ctrl.c.obj
+[186/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/helpers/nrfx_gppi_dppi.c.obj
+[187/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/helpers/nrfx_gppi_ppi.c.obj
+[188/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/src/nrfx_clock.c.obj
+[189/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/src/nrfx_dppi.c.obj
+[190/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/src/nrfx_ipc.c.obj
+[191/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/src/nrfx_gpiote.c.obj
+[192/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/src/nrfx_twim.c.obj
+[193/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/dma.c.obj
+[194/296] Building C object modules/hal_nordic/modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/nordic/ncs/v3.0.2/modules/hal/nordic/nrfx/drivers/src/nrfx_twi_twim.c.obj
+[195/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/device.c.obj
+[196/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/init.c.obj
+[197/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/io.c.obj
+[198/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/irq.c.obj
+[199/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/log.c.obj
+[200/296] Generating linker_zephyr_pre0.cmd
+[201/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/shmem.c.obj
+[202/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/softirq.c.obj
+[203/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/version.c.obj
+[204/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/alloc.c.obj
+[205/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/condition.c.obj
+[206/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/device.c.obj
+[207/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/init.c.obj
+[208/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/irq.c.obj
+[209/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/log.c.obj
+[210/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/shmem.c.obj
+[211/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/time.c.obj
+[212/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/version.c.obj
+[213/296] Building C object modules/libmetal/libmetal/lib/CMakeFiles/metal.dir/system/zephyr/sys.c.obj
+[214/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/virtio/virtio.c.obj
+[215/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/virtio/virtqueue.c.obj
+[216/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/rpmsg/rpmsg.c.obj
+[217/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/rpmsg/rpmsg_virtio.c.obj
+[218/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/remoteproc/elf_loader.c.obj
+[219/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/remoteproc/remoteproc.c.obj
+[220/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/remoteproc/remoteproc_virtio.c.obj
+[221/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/remoteproc/rsc_table_parser.c.obj
+[222/296] Building C object modules/open-amp/open-amp/lib/CMakeFiles/open_amp.dir/utils/utilities.c.obj
+[223/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/main_weak.c.obj
+[224/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/banner.c.obj
+[225/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/busy_wait.c.obj
+[226/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/errno.c.obj
+[227/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/device.c.obj
+[228/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/fatal.c.obj
+[229/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/init.c.obj
+[230/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/init_static.c.obj
+[231/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/kheap.c.obj
+[232/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mem_slab.c.obj
+[233/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/float.c.obj
+[234/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/version.c.obj
+[235/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/idle.c.obj
+[236/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mailbox.c.obj
+[237/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/msg_q.c.obj
+[238/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mutex.c.obj
+[239/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/queue.c.obj
+[240/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sem.c.obj
+[241/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/stack.c.obj
+[242/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/system_work_q.c.obj
+[243/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/work.c.obj
+[244/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/condvar.c.obj
+[245/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/priority_queues.c.obj
+[246/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/thread.c.obj
+[247/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/sched.c.obj
+[248/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timeslicing.c.obj
+[249/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/spinlock_validate.c.obj
+[250/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/thread_monitor.c.obj
+[251/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/xip.c.obj
+[252/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timeout.c.obj
+[253/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/timer.c.obj
+[254/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/poll.c.obj
+[255/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/mempool.c.obj
+[256/296] Building C object zephyr/kernel/CMakeFiles/kernel.dir/dynamic_disabled.c.obj
+[257/296] Building C object zephyr/CMakeFiles/zephyr_pre0.dir/misc/empty_file.c.obj
+[258/296] Linking C static library zephyr/arch/arch/arm/core/mpu/libarch__arm__core__mpu.a
+[259/296] Linking C static library zephyr/arch/arch/arm/core/cortex_m/cmse/libarch__arm__core__cortex_m__cmse.a
+[260/296] Linking C static library zephyr/lib/libc/newlib/liblib__libc__newlib.a
+[261/296] Linking C static library zephyr/arch/common/libarch__common.a
+[262/296] Linking C static library zephyr/lib/net_buf/liblib__net_buf.a
+[263/296] Linking C static library zephyr/arch/arch/arm/core/libarch__arm__core.a
+[264/296] Linking C static library zephyr/lib/libc/common/liblib__libc__common.a
+[265/296] Linking C static library zephyr/subsys/random/libsubsys__random.a
+[266/296] Linking C static library zephyr/drivers/bluetooth/libdrivers__bluetooth.a
+[267/296] Linking C static library zephyr/drivers/console/libdrivers__console.a
+[268/296] Linking C static library zephyr/arch/arch/arm/core/cortex_m/libarch__arm__core__cortex_m.a
+[269/296] Linking C static library zephyr/drivers/clock_control/libdrivers__clock_control.a
+[270/296] Linking C static library zephyr/soc/soc/nrf5340/libsoc__nordic.a
+[271/296] Linking C static library zephyr/subsys/bluetooth/common/libsubsys__bluetooth__common.a
+[272/296] Linking C static library zephyr/drivers/gpio/libdrivers__gpio.a
+[273/296] Linking C static library zephyr/drivers/entropy/libdrivers__entropy.a
+[274/296] Linking C static library zephyr/drivers/mbox/libdrivers__mbox.a
+[275/296] Linking C static library zephyr/drivers/sensor/st/lsm6dso/libdrivers__sensor__st__lsm6dso.a
+[276/296] Linking C static library zephyr/drivers/sensor/st/stmemsc/libdrivers__sensor__st__stmemsc.a
+[277/296] Linking C static library zephyr/drivers/i2c/libdrivers__i2c.a
+[278/296] Linking C static library zephyr/drivers/pinctrl/libdrivers__pinctrl.a
+[279/296] Linking C static library modules/nrf/subsys/nrf_security/src/zephyr/libmbedtls_zephyr.a
+[280/296] Linking C static library zephyr/drivers/timer/libdrivers__timer.a
+[281/296] Linking C static library zephyr/drivers/serial/libdrivers__serial.a
+[282/296] Linking C static library modules/nrf/drivers/hw_cc3xx/lib..__nrf__drivers__hw_cc3xx.a
+[283/296] Linking C static library zephyr/subsys/bluetooth/host/libsubsys__bluetooth__host.a
+[284/296] Linking C static library modules/open-amp/open-amp/lib/libopen_amp.a
+[285/296] Linking C static library modules/libmetal/libmetal/lib/libmetal.a
+[286/296] Linking C static library modules/hal_nordic/modules/hal_nordic/nrfx/libmodules__hal_nordic__nrfx.a
+[287/296] Linking C static library zephyr/libzephyr.a
+[288/296] Linking C static library zephyr/kernel/libkernel.a
+[289/296] Building C object CMakeFiles/app.dir/src/main.c.obj
+In file included from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:11,
+                 from /Users/zhaohaichao/Desktop/blinky/src/main.c:192:
+/Users/zhaohaichao/Desktop/blinky/src/main.c: In function 'imu_thread':
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                 ^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:27: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                           ^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:38: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                                      ^~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+In file included from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:34,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util.h:17,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/atomic.h:18,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/kernel_includes.h:25,
+                 from /opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/kernel.h:17,
+                 from /Users/zhaohaichao/Desktop/blinky/src/main.c:189:
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                 ^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:27: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                           ^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:38: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                                      ^~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:121:9: note: in expansion of macro 'COND_CODE_0'
+  121 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:112:17: note: in expansion of macro 'COND_CODE_0'
+  112 |                 COND_CODE_0(NUM_VA_ARGS_LESS_1(__VA_ARGS__),\
+      |                 ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:393:33: note: in expansion of macro 'Z_GET_ARGS_LESS_1'
+  393 | #define GET_ARGS_LESS_N(N, ...) Z_GET_ARGS_LESS_##N(__VA_ARGS__)
+      |                                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:114:32: note: in expansion of macro 'GET_ARGS_LESS_N'
+  114 |                             (, GET_ARGS_LESS_N(1, __VA_ARGS__))\
+      |                                ^~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:123:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX2'
+  123 |                 (Z_LOG_STR_WITH_PREFIX2(__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:132:18: note: in expansion of macro 'Z_LOG_STR_WITH_PREFIX'
+  132 |                 (Z_LOG_STR_WITH_PREFIX(__VA_ARGS__)), (__VA_ARGS__))
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:17: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                 ^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:27: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                           ^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:280:38: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  280 |                 roll_deg, pitch_deg, yaw_deg);
+      |                                      ^~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:75:25: note: in expansion of macro 'Z_LOG'
+   75 | #define LOG_DBG(...)    Z_LOG(LOG_LEVEL_DBG, __VA_ARGS__)
+      |                         ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:279:9: note: in expansion of macro 'LOG_DBG'
+  279 |         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f",
+      |         ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:21: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                     ^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:31: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                               ^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:42: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                                          ^~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:223:32: note: in definition of macro 'Z_LOG_TO_PRINTK'
+  223 |                              ##__VA_ARGS__); \
+      |                                ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:21: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                     ^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:31: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                               ^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:42: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                                          ^~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:72:26: note: in definition of macro '__DEBRACKET'
+   72 | #define __DEBRACKET(...) __VA_ARGS__
+      |                          ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:61:9: note: in expansion of macro '__COND_CODE'
+   61 |         __COND_CODE(_ZZZZ##_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:212:9: note: in expansion of macro 'Z_COND_CODE_0'
+  212 |         Z_COND_CODE_0(_flag, _if_0_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:403:9: note: in expansion of macro 'COND_CODE_0'
+  403 |         COND_CODE_0(NUM_VA_ARGS_LESS_1(_, ##__VA_ARGS__), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:388:9: note: in expansion of macro 'COND_CODE_1'
+  388 |         COND_CODE_1(CONFIG_LOG_FMT_SECTION, \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:405:18: note: in expansion of macro 'Z_LOG_FMT_ARGS_2'
+  405 |                 (Z_LOG_FMT_ARGS_2(_name, ##__VA_ARGS__)))
+      |                  ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:438:9: note: in expansion of macro 'Z_LOG_FMT_ARGS'
+  438 |         Z_LOG_FMT_ARGS(__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:35: note: in expansion of macro 'Z_LOG_FMT_RUNTIME_ARGS'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:69:53: note: in expansion of macro '__DEBRACKET'
+   69 | #define __GET_ARG2_DEBRACKET(ignore_this, val, ...) __DEBRACKET val
+      |                                                     ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:64:9: note: in expansion of macro '__GET_ARG2_DEBRACKET'
+   64 |         __GET_ARG2_DEBRACKET(one_or_two_args _if_code, _else_code)
+      |         ^~~~~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_internal.h:59:9: note: in expansion of macro '__COND_CODE'
+   59 |         __COND_CODE(_XXXX##_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/sys/util_macro.h:196:9: note: in expansion of macro 'Z_COND_CODE_1'
+  196 |         Z_COND_CODE_1(_flag, _if_1_code, _else_code)
+      |         ^~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:131:9: note: in expansion of macro 'COND_CODE_1'
+  131 |         COND_CODE_1(UTIL_CAT(Z_LOG_FUNC_PREFIX_##_level), \
+      |         ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:512:66: note: in expansion of macro 'Z_LOG_STR'
+  512 |                                   Z_LOG_FMT_RUNTIME_ARGS(_fmt, ##__VA_ARGS__));\
+      |                                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_msg.h:585:9: note: in expansion of macro 'Z_LOG_MSG_CREATE2'
+  585 |         Z_LOG_MSG_CREATE2(_try_0cpy, _mode, UTIL_CAT(Z_LOG_FUNC_PREFIX_, _level), \
+      |         ^~~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:308:17: note: in expansion of macro 'Z_LOG_MSG_CREATE'
+  308 |                 Z_LOG_MSG_CREATE(UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), _mode,                    \
+      |                 ^~~~~~~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:319:44: note: in expansion of macro 'Z_LOG2'
+  319 | #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+      |                                            ^~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:21: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                     ^~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:31: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                               ^~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:298:42: warning: implicit conversion from 'float' to 'double' when passing argument to function [-Wdouble-promotion]
+  298 |                     roll_deg, pitch_deg, yaw_deg);
+      |                                          ^~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log_core.h:315:50: note: in definition of macro 'Z_LOG2'
+  315 |                         z_log_printf_arg_checker(__VA_ARGS__);                                     \
+      |                                                  ^~~~~~~~~~~
+/opt/nordic/ncs/v3.0.2/zephyr/include/zephyr/logging/log.h:65:24: note: in expansion of macro 'Z_LOG'
+   65 | #define LOG_INF(...)   Z_LOG(LOG_LEVEL_INF, __VA_ARGS__)
+      |                        ^~~~~
+/Users/zhaohaichao/Desktop/blinky/src/main.c:297:13: note: in expansion of macro 'LOG_INF'
+  297 |             LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
+      |             ^~~~~~~
+[290/296] Linking C static library app/libapp.a
+[291/296] Linking C executable zephyr/zephyr_pre0.elf
+[292/296] Generating linker.cmd
+[293/296] Generating isr_tables.c, isr_tables_vt.ld, isr_tables_swi.ld
+[294/296] Building C object zephyr/CMakeFiles/zephyr_final.dir/misc/empty_file.c.obj
+[295/296] Building C object zephyr/CMakeFiles/zephyr_final.dir/isr_tables.c.obj
+[296/296] Linking C executable zephyr/zephyr.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:      372820 B         1 MB     35.55%
+             RAM:       75168 B       448 KB     16.39%
+        IDT_LIST:          0 GB        32 KB      0.00%
+Generating files from /Users/zhaohaichao/Desktop/blinky/build/blinky/zephyr/zephyr.elf for board: nrf7002dk
+[7/10] No install step for 'blinky'
+[8/10] Completed 'blinky'
+[9/10] cd /Users/zhaohaichao/Desktop/blinky/build/_sysbuild && /usr/local/bin/cmake -E true
+[10/10] Generating ../merged.hex

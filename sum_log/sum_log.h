@@ -1,0 +1,1 @@
+int sum_log(int a, int b);

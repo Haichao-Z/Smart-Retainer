@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+
+mainmenu "Blinky Application"
+
+choice SUM_IMPLEMENTATION
+    prompt "Sum function implementation"
+    default SUM_PRINT
+    help
+      Select which implementation of the sum function to use
+
+config SUM_PRINT
+    bool "Use printk() for sum"
+    help
+      Use printk() to display sum results
+
+config SUM_LOG
+    bool "Use Logger for sum"
+    select LOG
+    help
+      Use Zephyr logging subsystem to display sum results
+
+endchoice
+
+source "Kconfig.zephyr"

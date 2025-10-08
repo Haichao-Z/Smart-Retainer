@@ -1,0 +1,11 @@
+&i2c1 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_FAST>;
+    
+    bme280: bme280@77 {
+        compatible = "bosch,bme280";
+        reg = <0x77>;
+        status = "okay";
+    };
+};
