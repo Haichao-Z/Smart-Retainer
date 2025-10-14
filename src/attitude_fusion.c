@@ -1,6 +1,6 @@
 /**
  * @file attitude_fusion.c
- * @brief Madgwick AHRS filter implementation
+ * @brief Improved Madgwick AHRS filter with gyro bias calibration
  */
 
 #include "attitude_fusion.h"
@@ -8,7 +8,6 @@
 #include <math.h>
 #include <float.h>
 
-/* Define M_PI if not defined */
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -16,20 +15,57 @@
 LOG_MODULE_REGISTER(attitude_fusion, LOG_LEVEL_DBG);
 
 /* Filter parameters */
-static float beta_gain = 0.1f;        /* Filter gain */
+static float beta_gain = 0.3f;        /* Increased filter gain for better correction */
 static float sample_period = 0.01f;   /* Sampling period (seconds) */
 
+/* Gyro bias calibration */
+static float gyro_bias_x = 0.0f;
+static float gyro_bias_y = 0.0f;
+static float gyro_bias_z = 0.0f;
+static bool bias_calibrated = false;
+
 /* Current quaternion state */
-static quaternion_t q = {1.0f, 0.0f, 0.0f, 0.0f};  /* Identity quaternion */
+static quaternion_t q = {1.0f, 0.0f, 0.0f, 0.0f};
 static bool initialized = false;
 
-/* Use standard math library */
-static inline float inv_sqrt(float x)
+/* Motion detection */
+#define MOTION_THRESHOLD 0.15f  /* rad/s threshold for motion detection */
+#define ACCEL_THRESHOLD 0.5f    /* m/s² deviation from 1g for motion detection */
+
+/**
+ * @brief Calibrate gyroscope bias
+ * @note Device should be stationary during calibration
+ */
+int attitude_fusion_calibrate_gyro(const imu_data_t *samples, int num_samples)
 {
-    if (x <= 0.0f) {
-        return 0.0f;  /* Safety check */
+    if (!samples || num_samples < 10) {
+        LOG_ERR("Invalid calibration parameters");
+        return -EINVAL;
     }
-    return 1.0f / sqrtf(x);
+
+    float sum_x = 0.0f, sum_y = 0.0f, sum_z = 0.0f;
+
+    LOG_INF("Starting gyro calibration with %d samples...", num_samples);
+    LOG_INF("Keep device STATIONARY!");
+
+    for (int i = 0; i < num_samples; i++) {
+        sum_x += samples[i].gyro_x;
+        sum_y += samples[i].gyro_y;
+        sum_z += samples[i].gyro_z;
+    }
+
+    gyro_bias_x = sum_x / num_samples;
+    gyro_bias_y = sum_y / num_samples;
+    gyro_bias_z = sum_z / num_samples;
+
+    bias_calibrated = true;
+
+    LOG_INF("Gyro bias calibrated:");
+    LOG_INF("  X: %.4f rad/s", (double)gyro_bias_x);
+    LOG_INF("  Y: %.4f rad/s", (double)gyro_bias_y);
+    LOG_INF("  Z: %.4f rad/s", (double)gyro_bias_z);
+
+    return 0;
 }
 
 /**
@@ -46,20 +82,15 @@ int attitude_fusion_init(float beta, float sample_period_s)
         return -EINVAL;
     }
 
-    LOG_INF("  Setting beta_gain");
     beta_gain = beta;
-    
-    LOG_INF("  Setting sample_period");
     sample_period = sample_period_s;
     
-    LOG_INF("  Initializing quaternion");
     /* Initialize quaternion to identity */
     q.w = 1.0f;
     q.x = 0.0f;
     q.y = 0.0f;
     q.z = 0.0f;
     
-    LOG_INF("  Setting initialized flag");
     initialized = true;
     
     LOG_INF("attitude_fusion_init: Success - beta=%.3f, T=%.3f s", 
@@ -69,7 +100,22 @@ int attitude_fusion_init(float beta, float sample_period_s)
 }
 
 /**
- * @brief Madgwick AHRS update algorithm
+ * @brief Detect if device is stationary
+ */
+static bool is_stationary(float gx, float gy, float gz, float ax, float ay, float az)
+{
+    /* Check gyro magnitude */
+    float gyro_mag = sqrtf(gx*gx + gy*gy + gz*gz);
+    
+    /* Check if acceleration is close to 1g (9.8 m/s²) */
+    float accel_mag = sqrtf(ax*ax + ay*ay + az*az);
+    float accel_deviation = fabsf(accel_mag - 9.8f);
+    
+    return (gyro_mag < MOTION_THRESHOLD) && (accel_deviation < ACCEL_THRESHOLD);
+}
+
+/**
+ * @brief Improved Madgwick AHRS update algorithm
  */
 int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
 {
@@ -77,18 +123,25 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
         return -EINVAL;
     }
 
+    /* Apply gyro bias correction */
     float ax = imu_data->accel_x;
     float ay = imu_data->accel_y;
     float az = imu_data->accel_z;
-    float gx = imu_data->gyro_x;
-    float gy = imu_data->gyro_y;
-    float gz = imu_data->gyro_z;
+    float gx = imu_data->gyro_x - (bias_calibrated ? gyro_bias_x : 0.0f);
+    float gy = imu_data->gyro_y - (bias_calibrated ? gyro_bias_y : 0.0f);
+    float gz = imu_data->gyro_z - (bias_calibrated ? gyro_bias_z : 0.0f);
 
     float qw = q.w, qx = q.x, qy = q.y, qz = q.z;
     float norm;
     float s0, s1, s2, s3;
     float qDot1, qDot2, qDot3, qDot4;
     float _2qw, _2qx, _2qy, _2qz, _4qw, _4qx, _4qy, _8qx, _8qy, qwqw, qxqx, qyqy, qzqz;
+
+    /* Detect if stationary */
+    bool stationary = is_stationary(gx, gy, gz, ax, ay, az);
+    
+    /* Use higher beta gain when stationary for better drift correction */
+    float effective_beta = stationary ? (beta_gain * 2.0f) : beta_gain;
 
     /* Normalize accelerometer measurement */
     norm = sqrtf(ax * ax + ay * ay + az * az);
@@ -101,7 +154,7 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
     ay *= norm;
     az *= norm;
 
-    /* Auxiliary variables to avoid repeated calculations */
+    /* Auxiliary variables */
     _2qw = 2.0f * qw;
     _2qx = 2.0f * qx;
     _2qy = 2.0f * qy;
@@ -124,7 +177,6 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
     
     norm = sqrtf(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3);
     if (norm < 0.0001f) {
-        /* Skip gradient step if norm is too small */
         norm = 1.0f;
     } else {
         norm = 1.0f / norm;
@@ -135,10 +187,10 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
     s3 *= norm;
 
     /* Compute rate of change of quaternion from gyroscope */
-    qDot1 = 0.5f * (-qx * gx - qy * gy - qz * gz) - beta_gain * s0;
-    qDot2 = 0.5f * (qw * gx + qy * gz - qz * gy) - beta_gain * s1;
-    qDot3 = 0.5f * (qw * gy - qx * gz + qz * gx) - beta_gain * s2;
-    qDot4 = 0.5f * (qw * gz + qx * gy - qy * gx) - beta_gain * s3;
+    qDot1 = 0.5f * (-qx * gx - qy * gy - qz * gz) - effective_beta * s0;
+    qDot2 = 0.5f * (qw * gx + qy * gz - qz * gy) - effective_beta * s1;
+    qDot3 = 0.5f * (qw * gy - qx * gz + qz * gx) - effective_beta * s2;
+    qDot4 = 0.5f * (qw * gz + qx * gy - qy * gx) - effective_beta * s3;
 
     /* Integrate to yield quaternion */
     qw += qDot1 * sample_period;
@@ -171,7 +223,7 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
 }
 
 /**
- * @brief Convert quaternion to Euler angles
+ * @brief Convert quaternion to Euler angles (ZYX convention)
  */
 void quaternion_to_euler(const quaternion_t *q, euler_angles_t *euler)
 {
@@ -222,4 +274,12 @@ int attitude_fusion_get_current(attitude_t *attitude)
     attitude->timestamp = k_uptime_get_32();
 
     return 0;
+}
+
+/**
+ * @brief Check if gyro bias is calibrated
+ */
+bool attitude_fusion_is_calibrated(void)
+{
+    return bias_calibrated;
 }

@@ -1,189 +1,6 @@
-// // #include <stdio.h>
-// // #include <zephyr/kernel.h>
-// // #include <zephyr/drivers/gpio.h>
-// // #include <zephyr/device.h>
-// // #include <zephyr/devicetree.h>
-// // #include <zephyr/drivers/sensor.h>
-// // #include <zephyr/drivers/i2c.h>
-// // #include <zephyr/logging/log.h>
-
-// // #ifdef CONFIG_SUM_PRINT
-// // #include "sum_printk.h"
-// // #elif CONFIG_SUM_LOG
-// // #include "sum_log.h"
-// // #endif
-
-// // LOG_MODULE_REGISTER(main_app, LOG_LEVEL_INF);
-
-// // #define LED5180_NODE DT_ALIAS(led5180)
-// // #define Button5180_NODE DT_ALIAS(button5180)
-
-// // static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED5180_NODE, gpios);
-// // static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(Button5180_NODE, gpios);
-
-
-// // int main(void)
-// // {
-// //     int ret;
-// //     bool led_state = true;
-
-// //     printk("Starting application...\n");
-
-// // #ifdef CONFIG_SUM_PRINT
-// //     int result = sum_printk(10, 25);
-// // #elif CONFIG_SUM_LOG
-// //     int result = sum_log(10, 25);
-// // #endif
-
-// //     printk("Final result: %d\n", result);
-
-// //     if (!gpio_is_ready_dt(&led)) {
-// //         printk("LED not ready\n");
-// //         return 0;
-// //     }
-
-// //     ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
-// //     if (ret < 0) {
-// //         return 0;
-// //     }
-    
-// //     ret = gpio_pin_configure_dt(&button, GPIO_INPUT);
-// //     if (ret < 0) {
-// //         return 0;
-// //     }
-
-// //     int button_state = gpio_pin_get_dt(&button);
-// //     int button_last_state = button_state;
-
-// //     while (1) {
-// //         button_state = gpio_pin_get_dt(&button);
-// //         if (button_state && (button_state != button_last_state)) {
-// //             k_msleep(100);
-// //             button_state = gpio_pin_get_dt(&button);
-// //             if (button_state) {
-// //                 led_state = !led_state;
-// //                 ret = gpio_pin_set_dt(&led, (int)led_state);
-// //                 if (ret < 0) {
-// //                     return 0;
-// //                 }
-// //                 printk("LED state: %s\n", led_state ? "ON" : "OFF");
-// //             }
-// //         }
-// //         button_last_state = button_state;
-// //         k_msleep(10);
-// //     }
-// //     return 0;
-// // }
-
-
-
-// #include <zephyr/kernel.h>
-// #include <zephyr/device.h>
-// #include <zephyr/drivers/sensor.h>
-// #include <zephyr/drivers/i2c.h>
-// #include <zephyr/logging/log.h>
-
-// LOG_MODULE_REGISTER(main_app, LOG_LEVEL_INF);
-
-// int main(void)
-// {
-//     printk("\n=== nRF7002 DK BME280 Test ===\n");
-//     printk("I2C on P1.02 (SDA) and P1.03 (SCL)\n\n");
-    
-//     // 使用 i2c1
-//     const struct device *i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
-    
-//     if (i2c_dev == NULL) {
-//         printk("ERROR: I2C device is NULL!\n");
-//         return -1;
-//     }
-    
-//     if (!device_is_ready(i2c_dev)) {
-//         printk("ERROR: I2C device not ready!\n");
-//         return -1;
-//     }
-//     printk("✓ I2C1 device ready (P1.02/P1.03)\n");
-    
-//     printk("\nScanning I2C bus...\n");
-//     uint8_t cnt = 0;
-    
-//     /* Safe I2C bus scan: write one dummy byte (0x00) */
-// 	for (uint8_t addr = 0x08; addr < 0x78; addr++) {
-// 		uint8_t dummy = 0x00;
-// 		struct i2c_msg msg = {
-// 			.buf = &dummy,
-// 			.len = 1,
-// 			.flags = I2C_MSG_WRITE | I2C_MSG_STOP
-// 		};
-
-// 		int ret = i2c_transfer(i2c_dev, &msg, 1, addr);
-// 		if (ret == 0) {
-// 			printk("  [0x%02x] Device found\n", addr);
-// 			cnt++;
-// 		}
-// 	}
-
-    
-//     printk("Scan complete: %d device(s) found\n\n", cnt);
-    
-//     if (cnt == 0) {
-//         printk("⚠ No I2C devices detected!\n");
-//         printk("Check BME280 wiring:\n");
-//         printk("  SDA -> P1.02\n");
-//         printk("  SCL -> P1.03\n");
-//         printk("  VCC -> 3.3V or 1.8V (check BME280 voltage)\n");
-//         printk("  GND -> GND\n");
-//         return -1;
-//     }
-    
-//     const struct device *bme280_dev = DEVICE_DT_GET(DT_NODELABEL(bme280));
-    
-//     if (bme280_dev == NULL) {
-//         printk("ERROR: BME280 device is NULL!\n");
-//         return -1;
-//     }
-    
-//     if (!device_is_ready(bme280_dev)) {
-//         printk("ERROR: BME280 not ready!\n");
-//         printk("If scan found device at different address, update overlay\n");
-//         return -1;
-//     }
-//     printk("BME280 sensor ready\n\n");
-    
-//     struct sensor_value temp, press, humidity;
-//     int read_count = 0;
-    
-//     printk("Starting sensor readings...\n\n");
-    
-//     while (1) {
-//         int rc = sensor_sample_fetch(bme280_dev);
-        
-//         if (rc == 0) {
-//             sensor_channel_get(bme280_dev, SENSOR_CHAN_AMBIENT_TEMP, &temp);
-//             sensor_channel_get(bme280_dev, SENSOR_CHAN_PRESS, &press);
-//             sensor_channel_get(bme280_dev, SENSOR_CHAN_HUMIDITY, &humidity);
-            
-//             printk("[%d] T: %d.%02d°C | P: %d.%03d kPa | H: %d.%02d%%\n",
-//                    ++read_count,
-//                    temp.val1, temp.val2/10000,
-//                    press.val1, press.val2/1000,
-//                    humidity.val1, humidity.val2/10000);
-//         } else {
-//             printk("Sensor read failed: %d\n", rc);
-//         }
-        
-//         k_sleep(K_SECONDS(2));
-//     }
-    
-//     return 0;
-// }
-
 /**
  * @file main.c
- * @brief Smart Retainer MVP - Main Application
- * 
- * Real-time head orientation tracking using LSM6DS0 IMU
- * Data streaming via BLE to 3D visualization client
+ * @brief Smart Retainer MVP - Improved with Gyro Calibration
  */
 
 #include <zephyr/kernel.h>
@@ -211,8 +28,11 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 #define IMU_SAMPLE_PERIOD_MS    (1000 / IMU_SAMPLE_RATE_HZ)
 #define IMU_SAMPLE_PERIOD_S     (1.0f / IMU_SAMPLE_RATE_HZ)
 
-/* Madgwick filter gain */
-#define MADGWICK_BETA           0.1f
+/* Improved Madgwick filter gain */
+#define MADGWICK_BETA           0.3f    /* Increased from 0.1 for better correction */
+
+/* Calibration settings */
+#define CALIBRATION_SAMPLES     200     /* Number of samples for gyro calibration */
 
 /* Thread stack size */
 #define IMU_THREAD_STACK_SIZE   4096
@@ -225,6 +45,9 @@ static struct k_thread imu_thread_data;
 /* LED blink state */
 static bool led_state = false;
 
+/* Calibration buffer */
+static imu_data_t calibration_buffer[CALIBRATION_SAMPLES];
+
 /**
  * @brief LED heartbeat function
  */
@@ -236,6 +59,50 @@ static void led_heartbeat(void)
 
     led_state = !led_state;
     gpio_pin_set_dt(&led, led_state);
+}
+
+/**
+ * @brief Perform gyroscope calibration
+ */
+static int perform_gyro_calibration(void)
+{
+    int err;
+    
+    LOG_INF("=== GYROSCOPE CALIBRATION ===");
+    LOG_INF("Keep device STATIONARY for 2 seconds...");
+    
+    /* Blink LED during calibration */
+    for (int i = 0; i < 4; i++) {
+        led_heartbeat();
+        k_msleep(250);
+    }
+    
+    /* Collect calibration samples */
+    for (int i = 0; i < CALIBRATION_SAMPLES; i++) {
+        err = imu_driver_read(&calibration_buffer[i]);
+        if (err) {
+            LOG_ERR("Failed to read IMU during calibration: %d", err);
+            return err;
+        }
+        k_msleep(10);  /* 100 Hz sampling */
+    }
+    
+    /* Perform calibration */
+    err = attitude_fusion_calibrate_gyro(calibration_buffer, CALIBRATION_SAMPLES);
+    if (err) {
+        LOG_ERR("Gyro calibration failed: %d", err);
+        return err;
+    }
+    
+    LOG_INF("Gyro calibration complete!");
+    
+    /* Flash LED to indicate success */
+    for (int i = 0; i < 6; i++) {
+        led_heartbeat();
+        k_msleep(100);
+    }
+    
+    return 0;
 }
 
 /**
@@ -253,6 +120,11 @@ static void imu_thread(void *p1, void *p2, void *p3)
     uint32_t led_counter = 0;
 
     LOG_INF("IMU thread started");
+
+    /* Wait for calibration to complete */
+    while (!attitude_fusion_is_calibrated()) {
+        k_msleep(100);
+    }
 
     while (1) {
         /* Read IMU data */
@@ -272,9 +144,9 @@ static void imu_thread(void *p1, void *p2, void *p3)
         }
 
         /* Convert radians to degrees for logging */
-        float roll_deg = attitude.euler.roll * 180.0f / 3.14159f;
-        float pitch_deg = attitude.euler.pitch * 180.0f / 3.14159f;
-        float yaw_deg = attitude.euler.yaw * 180.0f / 3.14159f;
+        float roll_deg = attitude.euler.roll * 180.0f / M_PI;
+        float pitch_deg = attitude.euler.pitch * 180.0f / M_PI;
+        float yaw_deg = attitude.euler.yaw * 180.0f / M_PI;
 
         LOG_DBG("Attitude: R=%.1f P=%.1f Y=%.1f", 
                 roll_deg, pitch_deg, yaw_deg);
@@ -294,8 +166,12 @@ static void imu_thread(void *p1, void *p2, void *p3)
             led_counter = 0;
             
             /* Log current orientation */
-            LOG_INF("Head orientation: Roll=%.1f° Pitch=%.1f° Yaw=%.1f°",
-                    roll_deg, pitch_deg, yaw_deg);
+            LOG_INF("Orientation: R=%.1f° P=%.1f° Y=%.1f° | Q[%.3f,%.3f,%.3f,%.3f]",
+                    roll_deg, pitch_deg, yaw_deg,
+                    (double)attitude.quaternion.w,
+                    (double)attitude.quaternion.x,
+                    (double)attitude.quaternion.y,
+                    (double)attitude.quaternion.z);
         }
 
         /* Sleep until next sample */
@@ -342,10 +218,11 @@ static int system_init(void)
 {
     int err;
 
-    LOG_INF("Initializing system...");
+    LOG_INF("=== Smart Retainer Initialization ===");
 
+    /* Scan I2C bus */
     scan_i2c_bus();
-    LOG_INF("[1/6] I2C scan done");
+    LOG_INF("[1/7] I2C scan complete");
 
     /* Initialize LED */
     if (device_is_ready(led.port)) {
@@ -354,7 +231,7 @@ static int system_init(void)
             LOG_WRN("LED init failed: %d", err);
         }
     }
-    LOG_INF("[2/6] LED done");
+    LOG_INF("[2/7] LED initialized");
 
     /* Initialize IMU driver */
     imu_config_t imu_config = {
@@ -368,28 +245,42 @@ static int system_init(void)
         LOG_ERR("IMU init failed: %d", err);
         return err;
     }
-    LOG_INF("[3/6] IMU done");
+    LOG_INF("[3/7] IMU driver initialized");
+
+    /* Run IMU self-test */
+    err = imu_driver_self_test();
+    if (err) {
+        LOG_WRN("IMU self-test failed: %d", err);
+    }
+    LOG_INF("[4/7] IMU self-test complete");
 
     /* Initialize attitude fusion */
     err = attitude_fusion_init(MADGWICK_BETA, IMU_SAMPLE_PERIOD_S);
     if (err) {
-        LOG_ERR("Attitude init failed: %d", err);
+        LOG_ERR("Attitude fusion init failed: %d", err);
         return err;
     }
-    LOG_INF("[4/6] Attitude done");
+    LOG_INF("[5/7] Attitude fusion initialized (beta=%.2f)", (double)MADGWICK_BETA);
+
+    /* Perform gyro calibration */
+    err = perform_gyro_calibration();
+    if (err) {
+        LOG_ERR("Gyro calibration failed: %d", err);
+        return err;
+    }
+    LOG_INF("[6/7] Gyroscope calibrated");
 
     /* Initialize BLE service */
-    k_msleep(100);  // 给系统一点喘息时间
+    k_msleep(100);
     err = ble_imu_service_init();
     if (err) {
         LOG_ERR("BLE init failed: %d", err);
-        // 不要返回错误，继续运行
         LOG_WRN("Continuing without BLE...");
     } else {
-        LOG_INF("[5/6] BLE done");
+        LOG_INF("[7/7] BLE service initialized");
     }
 
-    printk("[6/6] All init complete!\n");
+    LOG_INF("=== Initialization Complete ===");
     return 0;
 }
 
@@ -400,8 +291,9 @@ int main(void)
 {
     int err;
 
-    LOG_INF("=== Smart Retainer MVP ===");
-    LOG_INF("Build time: " __DATE__ " " __TIME__);
+    LOG_INF("=== Smart Retainer MVP v2.0 ===");
+    LOG_INF("Build: " __DATE__ " " __TIME__);
+    LOG_INF("Features: Gyro calibration, drift reduction");
 
     /* Initialize system */
     err = system_init();

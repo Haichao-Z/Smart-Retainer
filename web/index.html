@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Retainer - 3D Head Tracking</title>
+    <title>Smart Retainer - 3D Head Tracking v2.0</title>
     <style>
         * {
             margin: 0;
@@ -33,6 +33,12 @@
 
         h1 {
             font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .version {
+            font-size: 12px;
+            opacity: 0.7;
             margin-bottom: 10px;
         }
 
@@ -90,7 +96,7 @@
             backdrop-filter: blur(10px);
             padding: 20px;
             border-radius: 12px;
-            min-width: 250px;
+            min-width: 280px;
             z-index: 5;
         }
 
@@ -130,12 +136,34 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
+        .calibration-info {
+            font-size: 11px;
+            color: #ffeb3b;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(255, 235, 59, 0.1);
+            border-radius: 4px;
+        }
+
+        .coordinate-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            max-width: 250px;
+        }
     </style>
 </head>
 <body>
     <div id="container">
         <div id="header">
             <h1>🦷 Smart Retainer - Real-Time Head Tracking</h1>
+            <div class="version">v2.0 - Improved with Gyro Calibration & Coordinate Correction</div>
             <div id="controls">
                 <button id="connectBtn">Connect to Device</button>
                 <button id="resetBtn" disabled>Reset Orientation</button>
@@ -150,15 +178,15 @@
             <div id="info-panel">
                 <h3 style="margin-bottom: 15px;">📊 Orientation Data</h3>
                 <div class="info-row">
-                    <span class="info-label">Roll:</span>
+                    <span class="info-label">Roll (X):</span>
                     <span class="info-value" id="roll">0.0°</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Pitch:</span>
+                    <span class="info-label">Pitch (Y):</span>
                     <span class="info-value" id="pitch">0.0°</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Yaw:</span>
+                    <span class="info-label">Yaw (Z):</span>
                     <span class="info-value" id="yaw">0.0°</span>
                 </div>
                 <hr style="margin: 15px 0; opacity: 0.3;">
@@ -186,6 +214,21 @@
                     <span class="info-label">Update Rate:</span>
                     <span class="info-value" id="fps">0 Hz</span>
                 </div>
+                <div class="calibration-info">
+                    💡 Device performs auto-calibration at startup. Keep stationary for 2 seconds after power-on.
+                </div>
+            </div>
+
+            <div class="coordinate-info">
+                <strong>📐 Coordinate System:</strong><br>
+                • X-axis (Red): Right<br>
+                • Y-axis (Green): Up<br>
+                • Z-axis (Blue): Forward<br>
+                <br>
+                <strong>Rotations:</strong><br>
+                • Roll: Rotation around X<br>
+                • Pitch: Rotation around Y<br>
+                • Yaw: Rotation around Z
             </div>
         </div>
     </div>
@@ -271,8 +314,8 @@
             gridHelper.position.y = -3;
             scene.add(gridHelper);
 
-            // Axes helper
-            const axesHelper = new THREE.AxesHelper(2);
+            // Enhanced axes helper
+            const axesHelper = new THREE.AxesHelper(2.5);
             scene.add(axesHelper);
 
             // Handle window resize
@@ -309,32 +352,23 @@
                 metalness: 0.8
             });
 
-            // Upper arch (牙弓)
+            // Upper arch
             const upperArchCurve = new THREE.EllipseCurve(
-                0, 0,
-                1.2, 0.9,
-                0, Math.PI,
-                false,
-                0
+                0, 0, 1.2, 0.9, 0, Math.PI, false, 0
             );
 
             // Create upper teeth
             const upperTeethPositions = [
-                // Central incisors
                 { x: -0.15, z: 1.0, width: 0.25, height: 0.35 },
                 { x: 0.15, z: 1.0, width: 0.25, height: 0.35 },
-                // Lateral incisors
                 { x: -0.45, z: 0.98, width: 0.22, height: 0.32 },
                 { x: 0.45, z: 0.98, width: 0.22, height: 0.32 },
-                // Canines
                 { x: -0.75, z: 0.92, width: 0.24, height: 0.38 },
                 { x: 0.75, z: 0.92, width: 0.24, height: 0.38 },
-                // Premolars
                 { x: -1.0, z: 0.75, width: 0.26, height: 0.32 },
                 { x: 1.0, z: 0.75, width: 0.26, height: 0.32 },
                 { x: -1.15, z: 0.5, width: 0.26, height: 0.32 },
                 { x: 1.15, z: 0.5, width: 0.26, height: 0.32 },
-                // Molars
                 { x: -1.2, z: 0.2, width: 0.28, height: 0.30 },
                 { x: 1.2, z: 0.2, width: 0.28, height: 0.30 }
             ];
@@ -345,7 +379,7 @@
                 group.add(tooth);
             });
 
-            // Upper retainer plate (透明基托)
+            // Upper retainer plate
             const upperPlateGeometry = new THREE.ExtrudeGeometry(
                 new THREE.Shape(upperArchCurve.getPoints(50)),
                 {
@@ -363,30 +397,21 @@
 
             // Lower arch
             const lowerArchCurve = new THREE.EllipseCurve(
-                0, 0,
-                1.1, 0.85,
-                0, Math.PI,
-                false,
-                0
+                0, 0, 1.1, 0.85, 0, Math.PI, false, 0
             );
 
             // Create lower teeth
             const lowerTeethPositions = [
-                // Central incisors (smaller)
                 { x: -0.12, z: 0.95, width: 0.20, height: 0.30 },
                 { x: 0.12, z: 0.95, width: 0.20, height: 0.30 },
-                // Lateral incisors
                 { x: -0.38, z: 0.93, width: 0.21, height: 0.30 },
                 { x: 0.38, z: 0.93, width: 0.21, height: 0.30 },
-                // Canines
                 { x: -0.68, z: 0.87, width: 0.22, height: 0.35 },
                 { x: 0.68, z: 0.87, width: 0.22, height: 0.35 },
-                // Premolars
                 { x: -0.92, z: 0.70, width: 0.24, height: 0.30 },
                 { x: 0.92, z: 0.70, width: 0.24, height: 0.30 },
                 { x: -1.05, z: 0.48, width: 0.24, height: 0.30 },
                 { x: 1.05, z: 0.48, width: 0.24, height: 0.30 },
-                // Molars
                 { x: -1.1, z: 0.2, width: 0.26, height: 0.28 },
                 { x: 1.1, z: 0.2, width: 0.26, height: 0.28 }
             ];
@@ -413,7 +438,7 @@
             lowerPlate.position.y = -0.65;
             group.add(lowerPlate);
 
-            // Retainer wire (金属丝)
+            // Retainer wire
             const wirePoints = [];
             const wireSegments = 50;
             for (let i = 0; i <= wireSegments; i++) {
@@ -425,10 +450,7 @@
             }
             const wireGeometry = new THREE.TubeGeometry(
                 new THREE.CatmullRomCurve3(wirePoints),
-                64,
-                0.015,
-                8,
-                false
+                64, 0.015, 8, false
             );
             const wire = new THREE.Mesh(wireGeometry, wireMaterial);
             group.add(wire);
@@ -445,9 +467,9 @@
             arrow.rotation.x = Math.PI / 2;
             group.add(arrow);
 
-            // Coordinate axes
-            const axesHelper = new THREE.AxesHelper(1.8);
-            group.add(axesHelper);
+            // Coordinate axes at model origin
+            const modelAxes = new THREE.AxesHelper(1.8);
+            group.add(modelAxes);
 
             retainerModel = group;
             scene.add(retainerModel);
@@ -457,14 +479,14 @@
         function createTooth(width, height, material) {
             const toothGroup = new THREE.Group();
 
-            // Tooth crown (main body)
             const crownGeometry = new THREE.BoxGeometry(width, height, 0.25);
             const crown = new THREE.Mesh(crownGeometry, material);
             crown.castShadow = true;
             toothGroup.add(crown);
 
-            // Tooth top (rounded)
-            const topGeometry = new THREE.SphereGeometry(width * 0.5, 8, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+            const topGeometry = new THREE.SphereGeometry(
+                width * 0.5, 8, 8, 0, Math.PI * 2, 0, Math.PI / 2
+            );
             const top = new THREE.Mesh(topGeometry, material);
             top.position.y = height / 2;
             top.scale.set(1, 0.3, 0.6);
@@ -497,11 +519,27 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
         }
 
-        // Update retainer orientation from quaternion
+        /**
+         * Update retainer orientation from quaternion
+         * IMPROVED: Proper coordinate system mapping
+         * 
+         * IMU Coordinate System (when placed as described):
+         *   X-axis: Right (positive to the right)
+         *   Y-axis: Up (positive upward)
+         *   Z-axis: Forward (positive toward user)
+         * 
+         * Three.js Coordinate System:
+         *   X-axis: Right
+         *   Y-axis: Up
+         *   Z-axis: Forward (toward camera)
+         * 
+         * The coordinate systems align, so we apply quaternion directly
+         */
         function updateRetainerOrientation(q) {
             if (!retainerModel) return;
 
-            // Apply quaternion to retainer model
+            // Apply quaternion directly (coordinate systems align)
+            // Note: Three.js quaternion constructor is (x, y, z, w)
             retainerModel.quaternion.set(q.x, q.y, q.z, q.w);
             
             updateCount++;
@@ -577,6 +615,7 @@
         function handleQuaternionData(event) {
             const value = event.target.value;
             
+            // Read quaternion (w, x, y, z) - little endian
             const w = value.getFloat32(0, true);
             const x = value.getFloat32(4, true);
             const y = value.getFloat32(8, true);
@@ -584,8 +623,10 @@
 
             currentQuaternion = { w, x, y, z };
 
+            // Update 3D model
             updateRetainerOrientation(currentQuaternion);
 
+            // Update UI
             document.getElementById('qw').textContent = w.toFixed(3);
             document.getElementById('qx').textContent = x.toFixed(3);
             document.getElementById('qy').textContent = y.toFixed(3);
@@ -595,12 +636,14 @@
         function handleEulerData(event) {
             const value = event.target.value;
             
+            // Read Euler angles in radians - little endian
             const roll = value.getFloat32(0, true);
             const pitch = value.getFloat32(4, true);
             const yaw = value.getFloat32(8, true);
 
             currentEuler = { roll, pitch, yaw };
 
+            // Convert to degrees
             const rollDeg = (roll * 180 / Math.PI).toFixed(1);
             const pitchDeg = (pitch * 180 / Math.PI).toFixed(1);
             const yawDeg = (yaw * 180 / Math.PI).toFixed(1);
@@ -626,6 +669,7 @@
             }
         }
 
+        // Event listeners
         connectBtn.addEventListener('click', () => {
             if (bleDevice && bleDevice.gatt.connected) {
                 disconnectBLE();
@@ -635,21 +679,24 @@
         });
 
         resetBtn.addEventListener('click', () => {
-            sendControlCommand(0x03);
+            sendControlCommand(0x03); // BLE_IMU_CMD_RESET
         });
 
         calibrateBtn.addEventListener('click', () => {
-            sendControlCommand(0x04);
+            sendControlCommand(0x04); // BLE_IMU_CMD_CALIBRATE
         });
 
+        // Check browser support
         if (!navigator.bluetooth) {
             alert('Web Bluetooth API is not supported in this browser. Please use Chrome, Edge, or Opera.');
             connectBtn.disabled = true;
         }
 
+        // Initialize on load
         window.addEventListener('load', () => {
             initThreeJS();
-            console.log('Smart Retainer Visualizer initialized');
+            console.log('Smart Retainer Visualizer v2.0 initialized');
+            console.log('Improvements: Gyro calibration, coordinate system fix');
         });
     </script>
 </body>
