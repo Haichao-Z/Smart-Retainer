@@ -1,27 +1,52 @@
 /**
- * @file imu_driver.c (FINAL SOLUTION)
- * @brief Correct coordinate mapping for Madgwick compatibility
+ * @file imu_driver.c (COORDINATE FIX SOLUTION)
+ * @brief Corrected coordinate mapping for consistent rotation behavior
  * 
- * Problem: Madgwick assumes gravity on Z-axis, but physically gravity is on Y-axis
- * 
- * Sensor physical orientation (board vertical, facing user):
- *   Sensor_X = Left  (horizontal)
- *   Sensor_Y = Up    (has gravity!)
- *   Sensor_Z = Forward (horizontal)
+ * PROBLEM ANALYSIS:
+ * ================
+ * Physical sensor orientation (board held vertically facing user):
+ *   Sensor PCB marking: X=Right, Y=Up, Z=Forward
+ *   Gravity direction: -Y (pointing down, so Y reads ~-9.8 m/s²)
  * 
  * User's expected coordinate system (board vertical):
  *   User_X = Right
- *   User_Y = Up
- *   User_Z = Forward
+ *   User_Y = Up  
+ *   User_Z = Forward (toward user)
  * 
- * Madgwick's required coordinate system (for Roll=0):
- *   Algorithm expects gravity on Z-axis!
- *   So we need to remap to make Z-axis vertical
+ * Web visualization coordinate system (Three.js standard):
+ *   Web_X = Right (Red axis)
+ *   Web_Y = Up (Green axis)
+ *   Web_Z = Forward toward camera (Blue axis)
  * 
- * Solution: Map coordinates so Madgwick sees gravity on Z
- *   Output_X (Right) = -Sensor_X (Left negated)
- *   Output_Y (Forward) = Sensor_Z (was forward)
- *   Output_Z (Up) = Sensor_Y (was up, has gravity)
+ * SOLUTION:
+ * =========
+ * Since the physical sensor axes ALREADY match our desired coordinate system,
+ * we only need to ensure Madgwick gets gravity on the correct axis.
+ * 
+ * Strategy: Apply MINIMAL transformation
+ * - Keep X, Y, Z axes as-is (they already match user expectations)
+ * - Invert Y to make gravity positive (Madgwick expects +Z = up with +gravity)
+ * - Actually, better approach: Let Madgwick handle gravity in -Y naturally
+ * 
+ * BETTER STRATEGY: No axis remapping, just sign correction
+ * ========================================================
+ * The root cause was the previous code mapped:
+ *   Physical Z → Algorithm Y (wrong!)
+ *   Physical Y → Algorithm Z
+ * 
+ * This caused:
+ *   Physical rotation around Z → Algorithm sees rotation around Y
+ * 
+ * NEW MAPPING (Identity + sign adjustments only):
+ * ===============================================
+ * Output_X = Sensor_X (right is right)
+ * Output_Y = Sensor_Y (up is up, gravity is -Y)  
+ * Output_Z = Sensor_Z (forward is forward)
+ * 
+ * For Madgwick compatibility when board is vertical:
+ * - Gravity is on -Y axis (~-9.8 m/s²)
+ * - Madgwick should be initialized to expect this
+ * - Roll=0, Pitch=0, Yaw=0 when board faces user upright
  */
 
 #include "imu_driver.h"
@@ -36,30 +61,43 @@ static bool driver_initialized = false;
 #define IMU_NODE DT_NODELABEL(lsm6dso)
 
 /**
- * @brief Apply coordinate transformation for Madgwick compatibility
+ * @brief Apply coordinate transformation (CORRECTED VERSION)
  * 
- * Remap axes so that:
- * - Gravity appears on Z-axis (required by Madgwick)
- * - X-axis points right
- * - Y-axis points forward
- * - Z-axis points up
+ * Key insight: Keep axes aligned with physical labels
+ * - X remains X (right)
+ * - Y remains Y (up, gravity is -Y)
+ * - Z remains Z (forward)
+ * 
+ * This ensures physical rotation around Z axis = mathematical rotation around Z
  */
-static void apply_madgwick_transform(float *x, float *y, float *z)
+static void apply_coordinate_correction(float *x, float *y, float *z)
 {
-    float sensor_x = *x;  /* Left (horizontal) */
-    float sensor_y = *y;  /* Up (has gravity ~9.8) */
-    float sensor_z = *z;  /* Forward (horizontal) */
+    // Read raw sensor values
+    float sensor_x = *x;  /* Right (per PCB marking) */
+    float sensor_y = *y;  /* Up (per PCB marking, gravity = -Y) */
+    float sensor_z = *z;  /* Forward (per PCB marking) */
     
-    /* Transform to make gravity on Z-axis for Madgwick */
-    *x = -sensor_x;       /* Left → Right (negate) */
-    *y = sensor_z;        /* Original forward → Algorithm forward */
-    *z = sensor_y;        /* Original up (gravity) → Algorithm up (gravity) */
+    /* IDENTITY MAPPING: Keep coordinate system as-is
+     * This maintains physical correspondence:
+     * - Physical X → Output X (right)
+     * - Physical Y → Output Y (up)  
+     * - Physical Z → Output Z (forward)
+     * 
+     * Result: Physical Z-axis rotation = Output Z-axis rotation ✓
+     */
+    *x = sensor_x;   /* Right */
+    *y = sensor_y;   /* Up (gravity is -Y) */
+    *z = sensor_z;   /* Forward */
     
-    /* Now Madgwick will see:
-     * - Z has gravity (what it expects)
-     * - X points right
-     * - Y points forward
-     * - When board is vertical: Roll=0, Pitch=0, Yaw=0 ✓
+    /* Alternative if you need right-handed system with +Z up:
+     * Uncomment this section if Madgwick absolutely requires gravity on +Z
+     * 
+     * *x = sensor_x;    // Right stays right
+     * *y = sensor_z;    // Forward → Y  
+     * *z = -sensor_y;   // Up → Z (negate to make gravity positive)
+     * 
+     * But this will change the rotation axis mapping!
+     * Better to keep identity and configure Madgwick appropriately.
      */
 }
 
@@ -68,7 +106,8 @@ int imu_driver_init(const imu_config_t *config)
     int ret;
 
     LOG_INF("Initializing IMU driver");
-    LOG_INF("Applying Madgwick-compatible coordinate transform");
+    LOG_INF("Coordinate mapping: Identity (X=X, Y=Y, Z=Z)");
+    LOG_INF("Expected: X=Right, Y=Up(gravity=-Y), Z=Forward");
 
     imu_dev = DEVICE_DT_GET(IMU_NODE);
     if (!device_is_ready(imu_dev)) {
@@ -78,6 +117,7 @@ int imu_driver_init(const imu_config_t *config)
 
     LOG_INF("IMU device ready");
 
+    /* Test sensor communication */
     struct sensor_value test_val;
     ret = sensor_sample_fetch(imu_dev);
     if (ret) {
@@ -133,18 +173,18 @@ int imu_driver_read(imu_data_t *data)
     float gy_raw = sensor_value_to_double(&gyro[1]);
     float gz_raw = sensor_value_to_double(&gyro[2]);
     
-    /* Apply Madgwick-compatible transform */
+    /* Apply coordinate correction (identity mapping) */
     float ax = ax_raw;
     float ay = ay_raw;
     float az = az_raw;
-    apply_madgwick_transform(&ax, &ay, &az);
+    apply_coordinate_correction(&ax, &ay, &az);
     
     float gx = gx_raw;
     float gy = gy_raw;
     float gz = gz_raw;
-    apply_madgwick_transform(&gx, &gy, &gz);
+    apply_coordinate_correction(&gx, &gy, &gz);
     
-    /* Store transformed data */
+    /* Store corrected data */
     data->accel_x = ax;
     data->accel_y = ay;
     data->accel_z = az;
@@ -155,9 +195,7 @@ int imu_driver_read(imu_data_t *data)
     
     data->timestamp = k_uptime_get_32();
 
-    LOG_DBG("Raw:   A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
-            ax_raw, ay_raw, az_raw, gx_raw, gy_raw, gz_raw);
-    LOG_DBG("Trans: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
+    LOG_DBG("IMU Data: A[%.2f, %.2f, %.2f] G[%.2f, %.2f, %.2f]",
             ax, ay, az, gx, gy, gz);
 
     return 0;
@@ -179,8 +217,9 @@ int imu_driver_self_test(void)
         return -EINVAL;
     }
 
-    LOG_INF("=== IMU Self-Test (Madgwick Transform) ===");
-    LOG_INF("Transform: X=-X, Y=Z, Z=Y (gravity on Z for Madgwick)");
+    LOG_INF("=== IMU Self-Test (Identity Coordinate Mapping) ===");
+    LOG_INF("Coordinate system: X=Right, Y=Up, Z=Forward");
+    LOG_INF("Expected when vertical: Y ≈ -9.8 m/s² (gravity down)");
 
     ret = imu_driver_read(&data);
     if (ret) {
@@ -188,29 +227,31 @@ int imu_driver_self_test(void)
         return ret;
     }
 
-    LOG_INF("\nAccelerometer (transformed for Madgwick):");
+    LOG_INF("\nAccelerometer:");
     LOG_INF("  X = %.2f m/s² (right/left)", (double)data.accel_x);
-    LOG_INF("  Y = %.2f m/s² (forward/back)", (double)data.accel_y);
-    LOG_INF("  Z = %.2f m/s² (up/down)", (double)data.accel_z);
+    LOG_INF("  Y = %.2f m/s² (up/down)", (double)data.accel_y);
+    LOG_INF("  Z = %.2f m/s² (forward/back)", (double)data.accel_z);
     
-    LOG_INF("Gyroscope (transformed):");
-    LOG_INF("  X = %.2f rad/s (roll rate)", (double)data.gyro_x);
-    LOG_INF("  Y = %.2f rad/s (pitch rate)", (double)data.gyro_y);
-    LOG_INF("  Z = %.2f rad/s (yaw rate)", (double)data.gyro_z);
+    LOG_INF("Gyroscope:");
+    LOG_INF("  X = %.2f rad/s (roll around X-axis)", (double)data.gyro_x);
+    LOG_INF("  Y = %.2f rad/s (pitch around Y-axis)", (double)data.gyro_y);
+    LOG_INF("  Z = %.2f rad/s (yaw around Z-axis)", (double)data.gyro_z);
 
-    /* Verify gravity on Z-axis */
+    /* Verify gravity direction */
     LOG_INF("\n=== Gravity Verification ===");
     LOG_INF("When board is VERTICAL (facing user):");
-    LOG_INF("  Expected: Z ≈ +9.8 m/s² (Madgwick standard)");
-    LOG_INF("  Actual:   Z = %.2f m/s²", (double)data.accel_z);
+    LOG_INF("  Expected: Y ≈ -9.8 m/s² (gravity pointing down)");
+    LOG_INF("  Actual:   Y = %.2f m/s²", (double)data.accel_y);
     
-    float abs_z = fabsf(data.accel_z);
-    if (abs_z > 8.0f && abs_z < 11.0f) {
-        LOG_INF("✓ SUCCESS: Gravity on Z-axis!");
-        LOG_INF("✓ Madgwick will compute Roll≈0° for this orientation!");
+    float abs_y = fabsf(data.accel_y);
+    if (abs_y > 8.0f && abs_y < 11.0f) {
+        LOG_INF("✓ SUCCESS: Gravity detected on Y-axis");
+        if (data.accel_y < 0) {
+            LOG_INF("✓ Gravity direction correct (pointing down = -Y)");
+        }
     } else {
-        LOG_WRN("✗ PROBLEM: Z = %.2f (expected ~9.8)", (double)data.accel_z);
-        LOG_WRN("  X = %.2f, Y = %.2f", (double)data.accel_x, (double)data.accel_y);
+        LOG_WRN("✗ UNEXPECTED: Y = %.2f (expected ~±9.8)", (double)data.accel_y);
+        LOG_WRN("  X = %.2f, Z = %.2f", (double)data.accel_x, (double)data.accel_z);
     }
 
     float mag = sqrtf(data.accel_x * data.accel_x + 
@@ -218,11 +259,13 @@ int imu_driver_self_test(void)
                       data.accel_z * data.accel_z);
     LOG_INF("Acceleration magnitude: %.2f m/s²", (double)mag);
 
-    LOG_INF("\n=== Expected Behavior ===");
-    LOG_INF("Board vertical (facing you) → Roll≈0°, Pitch≈0°, Yaw≈0°");
-    LOG_INF("Tilt board RIGHT → Roll increases");
-    LOG_INF("Tilt board AWAY from you → Pitch increases");  
-    LOG_INF("Rotate board CW (your view) → Yaw increases");
+    LOG_INF("\n=== Expected Rotation Behavior ===");
+    LOG_INF("Physical Z-axis rotation (board facing you, rotate like steering wheel):");
+    LOG_INF("  → Gyro Z should change");
+    LOG_INF("  → Yaw angle should change");
+    LOG_INF("  → Web model should rotate around its Z-axis (blue)");
+    LOG_INF("\nTilt board RIGHT → Roll changes (rotation around X, red axis)");
+    LOG_INF("Tilt board AWAY → Pitch changes (rotation around Y, green axis)");
 
     LOG_INF("\n=== Self-Test Complete ===\n");
     return 0;

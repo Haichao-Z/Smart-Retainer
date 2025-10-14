@@ -1,6 +1,14 @@
 /**
  * @file attitude_fusion.c
- * @brief Improved Madgwick AHRS filter with gyro bias calibration
+ * @brief Madgwick AHRS adapted for Y-axis gravity
+ * 
+ * COORDINATE SYSTEM:
+ * - X: Right
+ * - Y: Up (gravity is -Y, approximately -9.8 m/s²)
+ * - Z: Forward
+ * 
+ * This is adapted from standard Madgwick which assumes Z-up.
+ * We modify the gradient descent to work with Y-up configuration.
  */
 
 #include "attitude_fusion.h"
@@ -15,8 +23,8 @@
 LOG_MODULE_REGISTER(attitude_fusion, LOG_LEVEL_DBG);
 
 /* Filter parameters */
-static float beta_gain = 0.3f;        /* Increased filter gain for better correction */
-static float sample_period = 0.01f;   /* Sampling period (seconds) */
+static float beta_gain = 0.3f;
+static float sample_period = 0.01f;
 
 /* Gyro bias calibration */
 static float gyro_bias_x = 0.0f;
@@ -29,12 +37,11 @@ static quaternion_t q = {1.0f, 0.0f, 0.0f, 0.0f};
 static bool initialized = false;
 
 /* Motion detection */
-#define MOTION_THRESHOLD 0.15f  /* rad/s threshold for motion detection */
-#define ACCEL_THRESHOLD 0.5f    /* m/s² deviation from 1g for motion detection */
+#define MOTION_THRESHOLD 0.15f
+#define ACCEL_THRESHOLD 0.5f
 
 /**
  * @brief Calibrate gyroscope bias
- * @note Device should be stationary during calibration
  */
 int attitude_fusion_calibrate_gyro(const imu_data_t *samples, int num_samples)
 {
@@ -93,8 +100,8 @@ int attitude_fusion_init(float beta, float sample_period_s)
     
     initialized = true;
     
-    LOG_INF("attitude_fusion_init: Success - beta=%.3f, T=%.3f s", 
-            (double)beta_gain, (double)sample_period);
+    LOG_INF("attitude_fusion_init: Success");
+    LOG_INF("Coordinate system: X=Right, Y=Up(gravity=-Y), Z=Forward");
     
     return 0;
 }
@@ -104,10 +111,7 @@ int attitude_fusion_init(float beta, float sample_period_s)
  */
 static bool is_stationary(float gx, float gy, float gz, float ax, float ay, float az)
 {
-    /* Check gyro magnitude */
     float gyro_mag = sqrtf(gx*gx + gy*gy + gz*gz);
-    
-    /* Check if acceleration is close to 1g (9.8 m/s²) */
     float accel_mag = sqrtf(ax*ax + ay*ay + az*az);
     float accel_deviation = fabsf(accel_mag - 9.8f);
     
@@ -115,7 +119,11 @@ static bool is_stationary(float gx, float gy, float gz, float ax, float ay, floa
 }
 
 /**
- * @brief Improved Madgwick AHRS update algorithm
+ * @brief Madgwick AHRS update adapted for Y-axis gravity
+ * 
+ * Modified gradient descent algorithm that expects:
+ * - Gravity on -Y axis (down direction)
+ * - Accelerometer reads approximately [0, -9.8, 0] when upright
  */
 int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
 {
@@ -139,14 +147,11 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
 
     /* Detect if stationary */
     bool stationary = is_stationary(gx, gy, gz, ax, ay, az);
-    
-    /* Use higher beta gain when stationary for better drift correction */
     float effective_beta = stationary ? (beta_gain * 2.0f) : beta_gain;
 
     /* Normalize accelerometer measurement */
     norm = sqrtf(ax * ax + ay * ay + az * az);
     if (norm < 0.0001f) {
-        /* Skip update if accelerometer data is invalid */
         return 0;
     }
     norm = 1.0f / norm;
@@ -169,12 +174,37 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
     qyqy = qy * qy;
     qzqz = qz * qz;
 
-    /* Gradient descent algorithm corrective step */
-    s0 = _4qw * qyqy + _2qy * ax + _4qw * qxqx - _2qx * ay;
-    s1 = _4qx * qzqz - _2qz * ax + 4.0f * qwqw * qx - _2qw * ay - _4qx + _8qx * qxqx + _8qx * qyqy + _4qx * az;
-    s2 = 4.0f * qwqw * qy + _2qw * ax + _4qy * qzqz - _2qz * ay - _4qy + _8qy * qxqx + _8qy * qyqy + _4qy * az;
-    s3 = 4.0f * qxqx * qz - _2qx * ax + 4.0f * qyqy * qz - _2qy * ay;
+    /* Gradient descent - ADAPTED FOR Y-AXIS GRAVITY
+     * 
+     * Standard Madgwick assumes gravity on Z: [0, 0, -1]
+     * We have gravity on -Y: [0, -1, 0]
+     * 
+     * Gravity vector in body frame from quaternion (Y-down version):
+     * gx_body = 2*(qx*qy - qw*qz)
+     * gy_body = qw*qw - qx*qx + qy*qy - qz*qz  <- Should equal -1 for upright
+     * gz_body = 2*(qy*qz + qw*qx)
+     * 
+     * Objective function: f = [ax - gx_body, ay - gy_body, az - gz_body]
+     */
     
+    /* Compute gradient (derivative of objective function) */
+    s0 = -_2qz * (2.0f * (qx*qy - qw*qz) - ax) + 
+          _2qw * (qwqw - qxqx + qyqy - qzqz - ay) +
+          _2qx * (2.0f * (qy*qz + qw*qx) - az);
+    
+    s1 = _2qy * (2.0f * (qx*qy - qw*qz) - ax) +
+         -_2qx * (qwqw - qxqx + qyqy - qzqz - ay) +
+          _2qw * (2.0f * (qy*qz + qw*qx) - az);
+    
+    s2 = _2qx * (2.0f * (qx*qy - qw*qz) - ax) +
+          _2qy * (qwqw - qxqx + qyqy - qzqz - ay) +
+          _2qz * (2.0f * (qy*qz + qw*qx) - az);
+    
+    s3 = -_2qw * (2.0f * (qx*qy - qw*qz) - ax) +
+         -_2qz * (qwqw - qxqx + qyqy - qzqz - ay) +
+          _2qy * (2.0f * (qy*qz + qw*qx) - az);
+    
+    /* Normalize gradient */
     norm = sqrtf(s0 * s0 + s1 * s1 + s2 * s2 + s3 * s3);
     if (norm < 0.0001f) {
         norm = 1.0f;
@@ -201,7 +231,6 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
     /* Normalize quaternion */
     norm = sqrtf(qw * qw + qx * qx + qy * qy + qz * qz);
     if (norm < 0.0001f) {
-        /* Reset to identity if quaternion becomes invalid */
         q.w = 1.0f;
         q.x = 0.0f;
         q.y = 0.0f;
@@ -224,17 +253,22 @@ int attitude_fusion_update(const imu_data_t *imu_data, attitude_t *attitude)
 
 /**
  * @brief Convert quaternion to Euler angles (ZYX convention)
+ * 
+ * For Y-up coordinate system:
+ * - Roll: Rotation around X-axis (right)
+ * - Pitch: Rotation around Y-axis (up)
+ * - Yaw: Rotation around Z-axis (forward)
  */
 void quaternion_to_euler(const quaternion_t *q, euler_angles_t *euler)
 {
     float qw = q->w, qx = q->x, qy = q->y, qz = q->z;
 
-    /* Roll (X-axis rotation) */
+    /* Roll (rotation around X-axis) */
     float sinr_cosp = 2.0f * (qw * qx + qy * qz);
     float cosr_cosp = 1.0f - 2.0f * (qx * qx + qy * qy);
     euler->roll = atan2f(sinr_cosp, cosr_cosp);
 
-    /* Pitch (Y-axis rotation) */
+    /* Pitch (rotation around Y-axis) */
     float sinp = 2.0f * (qw * qy - qz * qx);
     if (fabsf(sinp) >= 1.0f) {
         euler->pitch = copysignf(M_PI / 2.0f, sinp);
@@ -242,15 +276,12 @@ void quaternion_to_euler(const quaternion_t *q, euler_angles_t *euler)
         euler->pitch = asinf(sinp);
     }
 
-    /* Yaw (Z-axis rotation) */
+    /* Yaw (rotation around Z-axis) */
     float siny_cosp = 2.0f * (qw * qz + qx * qy);
     float cosy_cosp = 1.0f - 2.0f * (qy * qy + qz * qz);
     euler->yaw = atan2f(siny_cosp, cosy_cosp);
 }
 
-/**
- * @brief Reset attitude to initial state
- */
 void attitude_fusion_reset(void)
 {
     q.w = 1.0f;
@@ -260,9 +291,6 @@ void attitude_fusion_reset(void)
     LOG_INF("Attitude fusion reset");
 }
 
-/**
- * @brief Get current attitude
- */
 int attitude_fusion_get_current(attitude_t *attitude)
 {
     if (!initialized || !attitude) {
@@ -276,9 +304,6 @@ int attitude_fusion_get_current(attitude_t *attitude)
     return 0;
 }
 
-/**
- * @brief Check if gyro bias is calibrated
- */
 bool attitude_fusion_is_calibrated(void)
 {
     return bias_calibrated;
