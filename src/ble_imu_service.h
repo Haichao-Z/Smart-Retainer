@@ -3,6 +3,7 @@
  * @brief BLE GATT service for IMU data transmission
  * 
  * Custom GATT service for streaming attitude data via BLE
+ * Compatible with BNO055 IMU driver
  */
 
 #ifndef BLE_IMU_SERVICE_H
@@ -12,7 +13,6 @@
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/bluetooth/gatt.h>
-#include "attitude_fusion.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +38,28 @@ extern "C" {
 #define BT_UUID_IMU_QUATERNION   BT_UUID_DECLARE_128(BT_UUID_IMU_QUATERNION_VAL)
 #define BT_UUID_IMU_EULER        BT_UUID_DECLARE_128(BT_UUID_IMU_EULER_VAL)
 #define BT_UUID_IMU_CONTROL      BT_UUID_DECLARE_128(BT_UUID_IMU_CONTROL_VAL)
+
+/* Quaternion structure */
+typedef struct {
+    float w;  /* Scalar part */
+    float x;  /* Vector part X */
+    float y;  /* Vector part Y */
+    float z;  /* Vector part Z */
+} quaternion_t;
+
+/* Euler angles structure (in radians) */
+typedef struct {
+    float roll;   /* Roll angle (rotation around X-axis) */
+    float pitch;  /* Pitch angle (rotation around Y-axis) */
+    float yaw;    /* Yaw angle (rotation around Z-axis) */
+} euler_angles_t;
+
+/* Attitude data structure */
+typedef struct {
+    quaternion_t quaternion;    /* Orientation as quaternion */
+    euler_angles_t euler;       /* Orientation as Euler angles */
+    uint32_t timestamp;         /* Timestamp in milliseconds */
+} attitude_t;
 
 /* Data packet structures for BLE transmission */
 typedef struct __attribute__((packed)) {

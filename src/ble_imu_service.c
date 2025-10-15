@@ -1,8 +1,8 @@
 /**
  * @file ble_imu_service.c
  * @brief BLE GATT service implementation for IMU data
+ * Updated for BNO055 compatibility
  */
-
 #include "ble_imu_service.h"
 #include <zephyr/logging/log.h>
 #include <zephyr/bluetooth/uuid.h>
@@ -119,22 +119,20 @@ static ssize_t control_write(struct bt_conn *conn, const struct bt_gatt_attr *at
     switch (cmd) {
     case BLE_IMU_CMD_START:
         LOG_INF("Received START command");
-        /* Start IMU streaming */
         break;
         
     case BLE_IMU_CMD_STOP:
         LOG_INF("Received STOP command");
-        /* Stop IMU streaming */
         break;
         
     case BLE_IMU_CMD_RESET:
         LOG_INF("Received RESET command");
-        attitude_fusion_reset();
+        /* BNO055 reset would be handled here */
         break;
         
     case BLE_IMU_CMD_CALIBRATE:
         LOG_INF("Received CALIBRATE command");
-        /* Perform calibration */
+        /* BNO055 calibration trigger */
         break;
         
     default:
@@ -210,7 +208,7 @@ int ble_imu_service_send_attitude(const attitude_t *attitude)
         err = bt_gatt_notify(current_conn, &imu_svc.attrs[1],
                             &quat_packet, sizeof(quat_packet));
         if (err) {
-            LOG_WRN("Quaternion notify failed: %d", err);
+            LOG_DBG("Quaternion notify failed: %d", err);
         }
     }
 
@@ -226,7 +224,7 @@ int ble_imu_service_send_attitude(const attitude_t *attitude)
         err = bt_gatt_notify(current_conn, &imu_svc.attrs[4],
                             &euler_packet, sizeof(euler_packet));
         if (err) {
-            LOG_WRN("Euler notify failed: %d", err);
+            LOG_DBG("Euler notify failed: %d", err);
         }
     }
 

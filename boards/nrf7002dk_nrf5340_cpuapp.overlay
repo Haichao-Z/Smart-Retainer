@@ -59,27 +59,21 @@
  * LSM6DSO IMU connected via I2C
  */
 
+/*
+ * Device Tree Overlay for nRF7002 DK
+ * BNO055 IMU connected via I2C
+ */
+
 &i2c1 {
     compatible = "nordic,nrf-twim";
     status = "okay";
-    clock-frequency = <I2C_BITRATE_FAST>; /* 400 kHz */
+    clock-frequency = <I2C_BITRATE_FAST_PLUS>; /* 100 kHz for BNO055 */
 
-    lsm6dso: lsm6dso@6b {
-        compatible = "st,lsm6dso";
-        reg = <0x6b>;
+    bno055: bno055@28 {
+        compatible = "bosch,bno055";
+        reg = <0x28>;  /* Default I2C address (COM3 pin low) */
+                       /* Use 0x29 if COM3 pin is high */
         status = "okay";
-        
-        /* Accelerometer configuration */
-        /* ODR values: 0=PowerDown, 1=12.5Hz, 2=26Hz, 3=52Hz, 4=104Hz, 
-                       5=208Hz, 6=417Hz, 7=833Hz, 8=1667Hz, 9=3333Hz, 10=6667Hz */
-        accel-odr = <4>;      /* 104 Hz */
-        accel-range = <0>;    /* 0=±2g, 1=±4g, 2=±8g, 3=±16g */
-        
-        /* Gyroscope configuration */
-        /* ODR values: same as accel */
-        gyro-odr = <4>;       /* 104 Hz */
-        gyro-range = <0>;     /* 0=±250dps, 1=±500dps, 2=±1000dps, 3=±2000dps */
-        
     };
 };
 

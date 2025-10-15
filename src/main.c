@@ -1,16 +1,14 @@
 /**
  * @file main.c
- * @brief Smart Retainer MVP - Improved with Gyro Calibration
+ * @brief Smart Retainer with BNO055 IMU
  */
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/drivers/i2c.h>
 
-#include "imu_driver.h"
-#include "attitude_fusion.h"
+#include "bno055_driver.h"
 #include "ble_imu_service.h"
 
 #ifndef M_PI
@@ -26,13 +24,6 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 /* Timing configuration */
 #define IMU_SAMPLE_RATE_HZ      100     /* 100 Hz sampling rate */
 #define IMU_SAMPLE_PERIOD_MS    (1000 / IMU_SAMPLE_RATE_HZ)
-#define IMU_SAMPLE_PERIOD_S     (1.0f / IMU_SAMPLE_RATE_HZ)
-
-/* Improved Madgwick filter gain */
-#define MADGWICK_BETA           0.3f    /* Increased from 0.1 for better correction */
-
-/* Calibration settings */
-#define CALIBRATION_SAMPLES     200     /* Number of samples for gyro calibration */
 
 /* Thread stack size */
 #define IMU_THREAD_STACK_SIZE   4096
@@ -44,9 +35,6 @@ static struct k_thread imu_thread_data;
 
 /* LED blink state */
 static bool led_state = false;
-
-/* Calibration buffer */
-static imu_data_t calibration_buffer[CALIBRATION_SAMPLES];
 
 /**
  * @brief LED heartbeat function
@@ -62,47 +50,68 @@ static void led_heartbeat(void)
 }
 
 /**
- * @brief Perform gyroscope calibration
+ * @brief Wait for BNO055 calibration
  */
-static int perform_gyro_calibration(void)
+static void wait_for_calibration(void)
 {
-    int err;
-    
-    LOG_INF("=== GYROSCOPE CALIBRATION ===");
-    LOG_INF("Keep device STATIONARY for 2 seconds...");
-    
-    /* Blink LED during calibration */
-    for (int i = 0; i < 4; i++) {
-        led_heartbeat();
-        k_msleep(250);
-    }
-    
-    /* Collect calibration samples */
-    for (int i = 0; i < CALIBRATION_SAMPLES; i++) {
-        err = imu_driver_read(&calibration_buffer[i]);
-        if (err) {
-            LOG_ERR("Failed to read IMU during calibration: %d", err);
-            return err;
+    bno055_calibration_t calib;
+    bool calibrated = false;
+    int led_counter = 0;
+
+    LOG_INF("=== BNO055 CALIBRATION ===");
+    LOG_INF("Move device in figure-8 pattern for magnetometer");
+    LOG_INF("Rotate around all axes for gyroscope");
+    LOG_INF("Place on stable surface for accelerometer");
+
+    while (!calibrated) {
+        if (bno055_get_calibration(&calib) == 0) {
+            LOG_INF("Calibration: Sys=%d Gyro=%d Accel=%d Mag=%d",
+                    calib.sys, calib.gyro, calib.accel, calib.mag);
+
+            /* Check if sufficiently calibrated (at least 2 for each) */
+            if (calib.sys >= 2 && calib.gyro >= 2 && 
+                calib.accel >= 2 && calib.mag >= 2) {
+                calibrated = true;
+                LOG_INF("Calibration sufficient!");
+            }
         }
-        k_msleep(10);  /* 100 Hz sampling */
+
+        /* Blink LED during calibration */
+        led_counter++;
+        if (led_counter >= 5) {
+            led_heartbeat();
+            led_counter = 0;
+        }
+
+        k_msleep(200);
     }
-    
-    /* Perform calibration */
-    err = attitude_fusion_calibrate_gyro(calibration_buffer, CALIBRATION_SAMPLES);
-    if (err) {
-        LOG_ERR("Gyro calibration failed: %d", err);
-        return err;
-    }
-    
-    LOG_INF("Gyro calibration complete!");
-    
-    /* Flash LED to indicate success */
+
+    /* Flash LED to indicate calibration complete */
     for (int i = 0; i < 6; i++) {
         led_heartbeat();
         k_msleep(100);
     }
-    
-    return 0;
+}
+
+/**
+ * @brief Convert BNO055 data to attitude structure
+ */
+static void bno055_to_attitude(const bno055_data_t *bno_data, attitude_t *attitude)
+{
+    /* Copy quaternion */
+    attitude->quaternion.w = bno_data->quaternion.w;
+    attitude->quaternion.x = bno_data->quaternion.x;
+    attitude->quaternion.y = bno_data->quaternion.y;
+    attitude->quaternion.z = bno_data->quaternion.z;
+
+    /* Convert Euler angles to radians if needed and map correctly
+     * BNO055: heading, roll, pitch
+     * Our system: roll, pitch, yaw */
+    attitude->euler.roll = bno_data->euler.roll * M_PI / 180.0f;
+    attitude->euler.pitch = bno_data->euler.pitch * M_PI / 180.0f;
+    attitude->euler.yaw = bno_data->euler.heading * M_PI / 180.0f;
+
+    attitude->timestamp = bno_data->timestamp;
 }
 
 /**
@@ -114,34 +123,27 @@ static void imu_thread(void *p1, void *p2, void *p3)
     ARG_UNUSED(p2);
     ARG_UNUSED(p3);
 
-    imu_data_t imu_data;
+    bno055_data_t bno_data;
     attitude_t attitude;
     int err;
     uint32_t led_counter = 0;
 
     LOG_INF("IMU thread started");
 
-    /* Wait for calibration to complete */
-    while (!attitude_fusion_is_calibrated()) {
-        k_msleep(100);
-    }
+    /* Wait for initial calibration */
+    k_msleep(1000);  /* Give sensor time to stabilize */
 
     while (1) {
-        /* Read IMU data */
-        err = imu_driver_read(&imu_data);
+        /* Read all BNO055 data */
+        err = bno055_read_all(&bno_data);
         if (err) {
-            LOG_ERR("Failed to read IMU: %d", err);
+            LOG_ERR("Failed to read BNO055: %d", err);
             k_msleep(IMU_SAMPLE_PERIOD_MS);
             continue;
         }
 
-        /* Update attitude estimation */
-        err = attitude_fusion_update(&imu_data, &attitude);
-        if (err) {
-            LOG_ERR("Failed to update attitude: %d", err);
-            k_msleep(IMU_SAMPLE_PERIOD_MS);
-            continue;
-        }
+        /* Convert to attitude structure */
+        bno055_to_attitude(&bno_data, &attitude);
 
         /* Convert radians to degrees for logging */
         float roll_deg = attitude.euler.roll * 180.0f / M_PI;
@@ -165,50 +167,22 @@ static void imu_thread(void *p1, void *p2, void *p3)
             led_heartbeat();
             led_counter = 0;
             
-            /* Log current orientation */
+            /* Log current orientation and calibration */
             LOG_INF("Orientation: R=%.1f° P=%.1f° Y=%.1f° | Q[%.3f,%.3f,%.3f,%.3f]",
                     roll_deg, pitch_deg, yaw_deg,
                     (double)attitude.quaternion.w,
                     (double)attitude.quaternion.x,
                     (double)attitude.quaternion.y,
                     (double)attitude.quaternion.z);
+
+            LOG_INF("Calibration: Sys=%d Gyro=%d Accel=%d Mag=%d",
+                    bno_data.calibration.sys, bno_data.calibration.gyro,
+                    bno_data.calibration.accel, bno_data.calibration.mag);
         }
 
         /* Sleep until next sample */
         k_msleep(IMU_SAMPLE_PERIOD_MS);
     }
-}
-
-/**
- * @brief Scan I2C bus for devices
- */
-static void scan_i2c_bus(void)
-{
-    const struct device *i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
-    
-    if (!device_is_ready(i2c_dev)) {
-        LOG_ERR("I2C device not ready");
-        return;
-    }
-    
-    LOG_INF("Scanning I2C bus...");
-    
-    for (uint8_t addr = 0x03; addr < 0x78; addr++) {
-        struct i2c_msg msgs[1];
-        uint8_t dummy_data = 0;
-        
-        msgs[0].buf = &dummy_data;
-        msgs[0].len = 0;
-        msgs[0].flags = I2C_MSG_WRITE | I2C_MSG_STOP;
-        
-        int ret = i2c_transfer(i2c_dev, msgs, 1, addr);
-        
-        if (ret == 0) {
-            LOG_INF("Found device at address 0x%02X", addr);
-        }
-    }
-    
-    LOG_INF("I2C scan complete");
 }
 
 /**
@@ -218,11 +192,7 @@ static int system_init(void)
 {
     int err;
 
-    LOG_INF("=== Smart Retainer Initialization ===");
-
-    /* Scan I2C bus */
-    scan_i2c_bus();
-    LOG_INF("[1/7] I2C scan complete");
+    LOG_INF("=== Smart Retainer Initialization (BNO055) ===");
 
     /* Initialize LED */
     if (device_is_ready(led.port)) {
@@ -231,44 +201,33 @@ static int system_init(void)
             LOG_WRN("LED init failed: %d", err);
         }
     }
-    LOG_INF("[2/7] LED initialized");
+    LOG_INF("[1/5] LED initialized");
 
-    /* Initialize IMU driver */
-    imu_config_t imu_config = {
-        .sample_rate_hz = IMU_SAMPLE_RATE_HZ,
-        .accel_range_g = 2,
-        .gyro_range_dps = 250
+    /* Initialize BNO055 */
+    bno055_config_t bno_config = {
+        .address = BNO055_ADDRESS_A,
+        .mode = BNO055_OPERATION_MODE_NDOF,  /* 9-DOF fusion mode */
+        .use_external_crystal = false,
+        .units_in_radians = false  /* Use degrees, we'll convert */
     };
 
-    err = imu_driver_init(&imu_config);
+    err = bno055_init(&bno_config);
     if (err) {
-        LOG_ERR("IMU init failed: %d", err);
+        LOG_ERR("BNO055 init failed: %d", err);
         return err;
     }
-    LOG_INF("[3/7] IMU driver initialized");
+    LOG_INF("[2/5] BNO055 initialized in NDOF mode");
 
-    /* Run IMU self-test */
-    err = imu_driver_self_test();
+    /* Run self-test */
+    err = bno055_self_test();
     if (err) {
-        LOG_WRN("IMU self-test failed: %d", err);
+        LOG_WRN("BNO055 self-test failed: %d", err);
     }
-    LOG_INF("[4/7] IMU self-test complete");
+    LOG_INF("[3/5] BNO055 self-test complete");
 
-    /* Initialize attitude fusion */
-    err = attitude_fusion_init(MADGWICK_BETA, IMU_SAMPLE_PERIOD_S);
-    if (err) {
-        LOG_ERR("Attitude fusion init failed: %d", err);
-        return err;
-    }
-    LOG_INF("[5/7] Attitude fusion initialized (beta=%.2f)", (double)MADGWICK_BETA);
-
-    /* Perform gyro calibration */
-    err = perform_gyro_calibration();
-    if (err) {
-        LOG_ERR("Gyro calibration failed: %d", err);
-        return err;
-    }
-    LOG_INF("[6/7] Gyroscope calibrated");
+    /* Wait for calibration */
+    wait_for_calibration();
+    LOG_INF("[4/5] BNO055 calibrated");
 
     /* Initialize BLE service */
     k_msleep(100);
@@ -277,7 +236,7 @@ static int system_init(void)
         LOG_ERR("BLE init failed: %d", err);
         LOG_WRN("Continuing without BLE...");
     } else {
-        LOG_INF("[7/7] BLE service initialized");
+        LOG_INF("[5/5] BLE service initialized");
     }
 
     LOG_INF("=== Initialization Complete ===");
@@ -291,9 +250,9 @@ int main(void)
 {
     int err;
 
-    LOG_INF("=== Smart Retainer MVP v2.0 ===");
+    LOG_INF("=== Smart Retainer MVP v3.0 (BNO055) ===");
     LOG_INF("Build: " __DATE__ " " __TIME__);
-    LOG_INF("Features: Gyro calibration, drift reduction");
+    LOG_INF("Features: BNO055 9-DOF with built-in fusion");
 
     /* Initialize system */
     err = system_init();
