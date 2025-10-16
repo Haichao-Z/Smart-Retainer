@@ -82,8 +82,16 @@ typedef enum {
     BLE_IMU_CMD_START = 0x01,
     BLE_IMU_CMD_STOP = 0x02,
     BLE_IMU_CMD_RESET = 0x03,
-    BLE_IMU_CMD_CALIBRATE = 0x04
+    BLE_IMU_CMD_CALIBRATE = 0x04,
+    BLE_IMU_CMD_SET_ZERO = 0x05  /* NEW: Set zero-point calibration */
 } ble_imu_control_cmd_t;
+
+/**
+ * @brief Control command callback type
+ * 
+ * Register a callback to handle control commands from BLE client
+ */
+typedef void (*ble_imu_control_callback_t)(uint8_t cmd);
 
 /**
  * @brief Initialize BLE IMU service
@@ -113,6 +121,13 @@ bool ble_imu_service_is_subscribed(void);
  * @return true if BLE is connected
  */
 bool ble_imu_service_is_connected(void);
+
+/**
+ * @brief Register callback for control commands
+ * 
+ * @param callback Function to call when control command received
+ */
+void ble_imu_service_register_control_callback(ble_imu_control_callback_t callback);
 
 #ifdef __cplusplus
 }

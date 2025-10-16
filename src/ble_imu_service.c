@@ -1,7 +1,7 @@
 /**
  * @file ble_imu_service.c
  * @brief BLE GATT service implementation for IMU data
- * Updated for BNO055 compatibility
+ * Updated with control command callback support
  */
 #include "ble_imu_service.h"
 #include <zephyr/logging/log.h>
@@ -15,6 +15,9 @@ static struct bt_conn *current_conn = NULL;
 /* Notification flags */
 static bool quaternion_notify_enabled = false;
 static bool euler_notify_enabled = false;
+
+/* Control command callback */
+static ble_imu_control_callback_t control_callback = NULL;
 
 /* Forward declarations */
 static void quaternion_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value);
@@ -127,17 +130,24 @@ static ssize_t control_write(struct bt_conn *conn, const struct bt_gatt_attr *at
         
     case BLE_IMU_CMD_RESET:
         LOG_INF("Received RESET command");
-        /* BNO055 reset would be handled here */
         break;
         
     case BLE_IMU_CMD_CALIBRATE:
         LOG_INF("Received CALIBRATE command");
-        /* BNO055 calibration trigger */
+        break;
+        
+    case BLE_IMU_CMD_SET_ZERO:
+        LOG_INF("🎯 Received SET ZERO POINT command");
         break;
         
     default:
         LOG_WRN("Unknown control command: 0x%02x", cmd);
         return BT_GATT_ERR(BT_ATT_ERR_NOT_SUPPORTED);
+    }
+
+    /* Call registered callback if available */
+    if (control_callback) {
+        control_callback(cmd);
     }
 
     return len;
@@ -245,4 +255,13 @@ bool ble_imu_service_is_subscribed(void)
 bool ble_imu_service_is_connected(void)
 {
     return (current_conn != NULL);
+}
+
+/**
+ * @brief Register control command callback
+ */
+void ble_imu_service_register_control_callback(ble_imu_control_callback_t callback)
+{
+    control_callback = callback;
+    LOG_INF("Control command callback registered");
 }

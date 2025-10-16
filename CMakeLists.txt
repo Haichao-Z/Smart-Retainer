@@ -9,6 +9,7 @@ target_sources(app PRIVATE
     src/main.c
     src/bno055_driver.c
     src/ble_imu_service.c
+    src/orientation_offset.c
 )
 
 target_include_directories(app PRIVATE
