@@ -540,7 +540,7 @@
 
             // Apply quaternion directly (coordinate systems align)
             // Note: Three.js quaternion constructor is (x, y, z, w)
-            retainerModel.quaternion.set(q.x, q.y, q.z, q.w);
+            retainerModel.quaternion.set(q.x, q.z, -q.y, q.w);
             
             updateCount++;
         }
@@ -641,12 +641,22 @@
             const pitch = value.getFloat32(4, true);
             const yaw = value.getFloat32(8, true);
 
-            currentEuler = { roll, pitch, yaw };
+            // 根据3D模型的变换规则调整Euler角度显示
+            // 3D模型: set(q.x, q.z, -q.y, q.w)
+            // 对应到Euler角度:
+            // - Roll (X轴): 保持不变 (roll)
+            // - Pitch (Y轴): 使用原来的Yaw值 (yaw)
+            // - Yaw (Z轴): 使用原来的Pitch值并取反 (-pitch)
+            currentEuler = { 
+                roll: -pitch,      // X轴保持不变
+                pitch: yaw,      // 原来的yaw变成pitch
+                yaw:   roll    // 原来的pitch取反后变成yaw
+            };
 
             // Convert to degrees
-            const rollDeg = (roll * 180 / Math.PI).toFixed(1);
-            const pitchDeg = (pitch * 180 / Math.PI).toFixed(1);
-            const yawDeg = (yaw * 180 / Math.PI).toFixed(1);
+            const rollDeg = (-pitch * 180 / Math.PI).toFixed(1);
+            const pitchDeg = (yaw * 180 / Math.PI).toFixed(1);      // 显示原来的yaw值
+            const yawDeg = (roll * 180 / Math.PI).toFixed(1);     // 显示原来的pitch值取反
 
             document.getElementById('roll').textContent = rollDeg + '°';
             document.getElementById('pitch').textContent = pitchDeg + '°';
