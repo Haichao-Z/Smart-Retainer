@@ -1,7 +1,7 @@
 /**
  * @file ble_imu_service.c
  * @brief BLE GATT service implementation for IMU data
- * Updated with control command callback support
+ * Fixed: Auto-restart advertising after disconnect
  */
 #include "ble_imu_service.h"
 #include <zephyr/logging/log.h>
@@ -19,11 +19,29 @@ static bool euler_notify_enabled = false;
 /* Control command callback */
 static ble_imu_control_callback_t control_callback = NULL;
 
+/* Advertising parameters (saved for restart) */
+static struct bt_le_adv_param adv_param = {
+    .id = BT_ID_DEFAULT,
+    .options = BT_LE_ADV_OPT_CONN | BT_LE_ADV_OPT_USE_NAME,
+    .interval_min = BT_GAP_ADV_FAST_INT_MIN_2,
+    .interval_max = BT_GAP_ADV_FAST_INT_MAX_2,
+};
+
+static struct bt_data ad[] = {
+    BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
+    BT_DATA_BYTES(BT_DATA_UUID128_ALL, BT_UUID_IMU_SERVICE_VAL),
+};
+
 /* Forward declarations */
 static void quaternion_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value);
 static void euler_ccc_changed(const struct bt_gatt_attr *attr, uint16_t value);
 static ssize_t control_write(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                              const void *buf, uint16_t len, uint16_t offset, uint8_t flags);
+static int restart_advertising(void);
+static void restart_adv_work_handler(struct k_work *work);
+
+/* Work queue for delayed advertising restart */
+static K_WORK_DELAYABLE_DEFINE(restart_adv_work, restart_adv_work_handler);
 
 /* GATT Service Definition */
 BT_GATT_SERVICE_DEFINE(imu_svc,
@@ -53,17 +71,74 @@ BT_GATT_SERVICE_DEFINE(imu_svc,
 );
 
 /**
+ * @brief Restart BLE advertising
+ */
+static int restart_advertising(void)
+{
+    int err;
+
+    LOG_INF("Attempting to restart advertising...");
+
+    /* Stop advertising first (in case it's still running) */
+    err = bt_le_adv_stop();
+    if (err && err != -EALREADY) {
+        LOG_DBG("Stop advertising returned: %d (may be already stopped)", err);
+    }
+
+    /* Longer delay to ensure complete cleanup of BLE stack resources */
+    k_msleep(500);
+
+    /* Start advertising with retry mechanism */
+    for (int retry = 0; retry < 3; retry++) {
+        err = bt_le_adv_start(&adv_param, ad, ARRAY_SIZE(ad), NULL, 0);
+        
+        if (err == 0) {
+            LOG_INF("✓ BLE advertising restarted successfully");
+            return 0;
+        }
+        
+        if (err == -EALREADY) {
+            LOG_WRN("Advertising already active, stopping first...");
+            bt_le_adv_stop();
+            k_msleep(500);
+            continue;
+        }
+        
+        LOG_WRN("Advertising restart attempt %d failed: %d", retry + 1, err);
+        
+        if (retry < 2) {
+            k_msleep(1000);  // Wait longer between retries
+        }
+    }
+
+    LOG_ERR("Failed to restart advertising after 3 attempts: %d", err);
+    return err;
+}
+
+/**
+ * @brief Work handler for restarting advertising
+ */
+static void restart_adv_work_handler(struct k_work *work)
+{
+    LOG_INF("Workqueue: Restarting advertising after disconnect...");
+    restart_advertising();
+}
+
+/**
  * @brief Connection callback
  */
 static void connected(struct bt_conn *conn, uint8_t err)
 {
     if (err) {
         LOG_ERR("Connection failed: %d", err);
+        
+        /* Restart advertising on connection failure */
+        restart_advertising();
         return;
     }
 
     current_conn = bt_conn_ref(conn);
-    LOG_INF("BLE Connected");
+    LOG_INF("✓ BLE Connected");
 }
 
 /**
@@ -71,7 +146,10 @@ static void connected(struct bt_conn *conn, uint8_t err)
  */
 static void disconnected(struct bt_conn *conn, uint8_t reason)
 {
-    LOG_INF("BLE Disconnected: reason %d", reason);
+    char addr[BT_ADDR_LE_STR_LEN];
+    bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
+    
+    LOG_INF("BLE Disconnected from %s, reason: 0x%02x", addr, reason);
 
     if (current_conn) {
         bt_conn_unref(current_conn);
@@ -80,6 +158,9 @@ static void disconnected(struct bt_conn *conn, uint8_t reason)
 
     quaternion_notify_enabled = false;
     euler_notify_enabled = false;
+
+    /* Use workqueue to restart advertising to avoid blocking BLE callback */
+    k_work_schedule(&restart_adv_work, K_MSEC(500));
 }
 
 BT_CONN_CB_DEFINE(conn_callbacks) = {
@@ -172,18 +253,6 @@ int ble_imu_service_init(void)
     LOG_INF("Bluetooth initialized");
 
     /* Start advertising */
-    struct bt_le_adv_param adv_param = {
-        .id = BT_ID_DEFAULT,
-        .options = BT_LE_ADV_OPT_CONN | BT_LE_ADV_OPT_USE_NAME,
-        .interval_min = BT_GAP_ADV_FAST_INT_MIN_2,
-        .interval_max = BT_GAP_ADV_FAST_INT_MAX_2,
-    };
-
-    struct bt_data ad[] = {
-        BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
-        BT_DATA_BYTES(BT_DATA_UUID128_ALL, BT_UUID_IMU_SERVICE_VAL),
-    };
-
     err = bt_le_adv_start(&adv_param, ad, ARRAY_SIZE(ad), NULL, 0);
     if (err) {
         LOG_ERR("Advertising failed to start: %d", err);
@@ -264,4 +333,12 @@ void ble_imu_service_register_control_callback(ble_imu_control_callback_t callba
 {
     control_callback = callback;
     LOG_INF("Control command callback registered");
+}
+
+/**
+ * @brief Manually restart advertising (for debug/testing)
+ */
+int ble_imu_service_restart_advertising(void)
+{
+    return restart_advertising();
 }
