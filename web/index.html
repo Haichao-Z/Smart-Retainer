@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Retainer - 3D Head Tracking v2.0</title>
+    <title>Smart Retainer - 3D Head Tracking v2.1</title>
     <style>
         * {
             margin: 0;
@@ -163,11 +163,11 @@
     <div id="container">
         <div id="header">
             <h1>🦷 Smart Retainer - Real-Time Head Tracking</h1>
-            <div class="version">v2.0 - Improved with Gyro Calibration & Coordinate Correction</div>
+            <div class="version">v2.2 - Zero-point calibration with angle reset</div>
             <div id="controls">
                 <button id="connectBtn">Connect to Device</button>
                 <button id="resetBtn" disabled>Reset Orientation</button>
-                <button id="calibrateBtn" disabled>Calibrate</button>
+                <button id="calibrateBtn" disabled>Set Zero Point</button>
                 <div id="status" class="pulse">⚪ Disconnected</div>
             </div>
         </div>
@@ -178,15 +178,15 @@
             <div id="info-panel">
                 <h3 style="margin-bottom: 15px;">📊 Orientation Data</h3>
                 <div class="info-row">
-                    <span class="info-label">Roll (X):</span>
+                    <span class="info-label">Roll (X-axis):</span>
                     <span class="info-value" id="roll">0.0°</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Pitch (Y):</span>
+                    <span class="info-label">Pitch (Y-axis):</span>
                     <span class="info-value" id="pitch">0.0°</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Yaw (Z):</span>
+                    <span class="info-label">Yaw (Z-axis):</span>
                     <span class="info-value" id="yaw">0.0°</span>
                 </div>
                 <hr style="margin: 15px 0; opacity: 0.3;">
@@ -215,7 +215,10 @@
                     <span class="info-value" id="fps">0 Hz</span>
                 </div>
                 <div class="calibration-info">
-                    💡 Device performs auto-calibration at startup. Keep stationary for 2 seconds after power-on.
+                    💡 Press "Set Zero Point" to calibrate reference orientation. 
+                    <span id="calibration-status" style="display: block; margin-top: 5px; color: #ff9800;">
+                        Status: Not Calibrated
+                    </span>
                 </div>
             </div>
 
@@ -226,16 +229,16 @@
                 • Z-axis (Blue): Forward<br>
                 <br>
                 <strong>Rotations:</strong><br>
-                • Roll: Rotation around X<br>
-                • Pitch: Rotation around Y<br>
-                • Yaw: Rotation around Z
+                • Roll: Tilt left/right<br>
+                • Pitch: Nod up/down<br>
+                • Yaw: Turn left/right
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // BLE Service UUIDs (matching firmware)
+        // BLE Service UUIDs
         const IMU_SERVICE_UUID = '12345678-1234-5678-1234-56789abcdef0';
         const QUATERNION_CHAR_UUID = '12345678-1234-5678-1234-56789abcdef1';
         const EULER_CHAR_UUID = '12345678-1234-5678-1234-56789abcdef2';
@@ -254,10 +257,13 @@
 
         // Data variables
         let currentQuaternion = { w: 1, x: 0, y: 0, z: 0 };
-        let currentEuler = { roll: 0, pitch: 0, yaw: 0 };
         let lastUpdateTime = 0;
         let updateCount = 0;
         let fps = 0;
+        
+        // Zero-point calibration
+        let zeroQuaternion = null;  // Reference quaternion for zero point
+        let isCalibrated = false;
 
         // UI Elements
         const connectBtn = document.getElementById('connectBtn');
@@ -270,11 +276,9 @@
             const canvas = document.getElementById('render-canvas');
             const container = document.getElementById('canvas-container');
 
-            // Scene setup
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x1a1a2e);
 
-            // Camera setup
             camera = new THREE.PerspectiveCamera(
                 50,
                 container.clientWidth / container.clientHeight,
@@ -284,12 +288,10 @@
             camera.position.set(0, 0, 8);
             camera.lookAt(0, 0, 0);
 
-            // Renderer setup
             renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.shadowMap.enabled = true;
 
-            // Lights
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
 
@@ -306,30 +308,22 @@
             fillLight.position.set(0, -5, 0);
             scene.add(fillLight);
 
-            // Create retainer model
             createRetainerModel();
 
-            // Grid helper
             const gridHelper = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
             gridHelper.position.y = -3;
             scene.add(gridHelper);
 
-            // Enhanced axes helper
             const axesHelper = new THREE.AxesHelper(2.5);
             scene.add(axesHelper);
 
-            // Handle window resize
             window.addEventListener('resize', onWindowResize);
-
-            // Start animation loop
             animate();
         }
 
-        // Create realistic dental retainer model
         function createRetainerModel() {
             const group = new THREE.Group();
 
-            // Materials
             const toothMaterial = new THREE.MeshStandardMaterial({
                 color: 0xfff8e7,
                 roughness: 0.3,
@@ -352,12 +346,10 @@
                 metalness: 0.8
             });
 
-            // Upper arch
             const upperArchCurve = new THREE.EllipseCurve(
                 0, 0, 1.2, 0.9, 0, Math.PI, false, 0
             );
 
-            // Create upper teeth
             const upperTeethPositions = [
                 { x: -0.15, z: 1.0, width: 0.25, height: 0.35 },
                 { x: 0.15, z: 1.0, width: 0.25, height: 0.35 },
@@ -379,7 +371,6 @@
                 group.add(tooth);
             });
 
-            // Upper retainer plate
             const upperPlateGeometry = new THREE.ExtrudeGeometry(
                 new THREE.Shape(upperArchCurve.getPoints(50)),
                 {
@@ -395,12 +386,10 @@
             upperPlate.position.y = 0.15;
             group.add(upperPlate);
 
-            // Lower arch
             const lowerArchCurve = new THREE.EllipseCurve(
                 0, 0, 1.1, 0.85, 0, Math.PI, false, 0
             );
 
-            // Create lower teeth
             const lowerTeethPositions = [
                 { x: -0.12, z: 0.95, width: 0.20, height: 0.30 },
                 { x: 0.12, z: 0.95, width: 0.20, height: 0.30 },
@@ -422,7 +411,6 @@
                 group.add(tooth);
             });
 
-            // Lower retainer plate
             const lowerPlateGeometry = new THREE.ExtrudeGeometry(
                 new THREE.Shape(lowerArchCurve.getPoints(50)),
                 {
@@ -438,7 +426,6 @@
             lowerPlate.position.y = -0.65;
             group.add(lowerPlate);
 
-            // Retainer wire
             const wirePoints = [];
             const wireSegments = 50;
             for (let i = 0; i <= wireSegments; i++) {
@@ -455,7 +442,6 @@
             const wire = new THREE.Mesh(wireGeometry, wireMaterial);
             group.add(wire);
 
-            // Direction indicator arrow
             const arrowGeometry = new THREE.ConeGeometry(0.12, 0.4, 8);
             const arrowMaterial = new THREE.MeshStandardMaterial({
                 color: 0xff4444,
@@ -467,7 +453,6 @@
             arrow.rotation.x = Math.PI / 2;
             group.add(arrow);
 
-            // Coordinate axes at model origin
             const modelAxes = new THREE.AxesHelper(1.8);
             group.add(modelAxes);
 
@@ -475,7 +460,6 @@
             scene.add(retainerModel);
         }
 
-        // Create individual tooth
         function createTooth(width, height, material) {
             const toothGroup = new THREE.Group();
 
@@ -495,11 +479,9 @@
             return toothGroup;
         }
 
-        // Animation loop
         function animate() {
             animationId = requestAnimationFrame(animate);
 
-            // Update FPS counter
             const now = Date.now();
             if (now - lastUpdateTime >= 1000) {
                 fps = updateCount;
@@ -511,7 +493,6 @@
             renderer.render(scene, camera);
         }
 
-        // Handle window resize
         function onWindowResize() {
             const container = document.getElementById('canvas-container');
             camera.aspect = container.clientWidth / container.clientHeight;
@@ -520,32 +501,149 @@
         }
 
         /**
+         * Quaternion conjugate (inverse for unit quaternions)
+         */
+        function quaternionConjugate(q) {
+            return { w: q.w, x: -q.x, y: -q.y, z: -q.z };
+        }
+
+        /**
+         * Quaternion multiplication: q1 * q2
+         */
+        function quaternionMultiply(q1, q2) {
+            return {
+                w: q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+                x: q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+                y: q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
+                z: q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w
+            };
+        }
+
+        /**
+         * Apply zero-point calibration to quaternion
+         * Returns: q_zero_inverse * q_current
+         */
+        function applyZeroPointCalibration(q) {
+            if (!isCalibrated || !zeroQuaternion) {
+                return q;
+            }
+            
+            // Get inverse of zero quaternion
+            const qZeroInv = quaternionConjugate(zeroQuaternion);
+            
+            // Apply correction: q_corrected = q_zero_inv * q_current
+            return quaternionMultiply(qZeroInv, q);
+        }
+
+        /**
+         * Set current orientation as zero point
+         */
+        function setZeroPoint(q) {
+            zeroQuaternion = { w: q.w, x: q.x, y: q.y, z: q.z };
+            isCalibrated = true;
+            
+            console.log('Zero point set:', zeroQuaternion);
+            console.log('Euler angles will now be relative to this orientation');
+            
+            // Visual feedback
+            statusDiv.textContent = '🟢 Connected (Calibrated ✓)';
+            
+            // Update calibration status
+            const calibStatus = document.getElementById('calibration-status');
+            if (calibStatus) {
+                calibStatus.textContent = 'Status: Calibrated ✓';
+                calibStatus.style.color = '#4caf50';
+            }
+            
+            // Show notification
+            showCalibrationNotification();
+        }
+
+        /**
+         * Reset zero point calibration
+         */
+        function resetZeroPoint() {
+            zeroQuaternion = null;
+            isCalibrated = false;
+            
+            console.log('Zero point reset');
+            
+            // Update calibration status
+            const calibStatus = document.getElementById('calibration-status');
+            if (calibStatus) {
+                calibStatus.textContent = 'Status: Not Calibrated';
+                calibStatus.style.color = '#ff9800';
+            }
+            
+            if (bleDevice && bleDevice.gatt.connected) {
+                statusDiv.textContent = '🟢 Connected';
+            }
+        }
+
+        /**
+         * Show calibration success notification
+         */
+        function showCalibrationNotification() {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(76, 175, 80, 0.95);
+                color: white;
+                padding: 30px 50px;
+                border-radius: 15px;
+                font-size: 18px;
+                font-weight: bold;
+                z-index: 1000;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            `;
+            notification.innerHTML = `
+                ✓ Zero Point Set!<br>
+                <span style="font-size: 14px; font-weight: normal;">Angles are now relative to this position</span>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transition = 'opacity 0.5s';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 2000);
+        }
+
+        /**
          * Update retainer orientation from quaternion
-         * IMPROVED: Proper coordinate system mapping
-         * 
-         * IMU Coordinate System (when placed as described):
-         *   X-axis: Right (positive to the right)
-         *   Y-axis: Up (positive upward)
-         *   Z-axis: Forward (positive toward user)
-         * 
-         * Three.js Coordinate System:
-         *   X-axis: Right
-         *   Y-axis: Up
-         *   Z-axis: Forward (toward camera)
-         * 
-         * The coordinate systems align, so we apply quaternion directly
+         * Maps: set(q.x, q.z, -q.y, q.w)
          */
         function updateRetainerOrientation(q) {
             if (!retainerModel) return;
-
-            // Apply quaternion directly (coordinate systems align)
-            // Note: Three.js quaternion constructor is (x, y, z, w)
             retainerModel.quaternion.set(q.x, q.z, -q.y, q.w);
-            
             updateCount++;
         }
 
-        // BLE Connection
+        /**
+         * Convert quaternion to Euler angles matching 3D model rotation
+         * Based on the transformation: set(q.x, q.z, -q.y, q.w)
+         */
+        function quaternionToEulerForDisplay(q) {
+            // Create Three.js quaternion with the same mapping as 3D model
+            const threeQuat = new THREE.Quaternion(q.x, q.z, -q.y, q.w);
+            
+            // Convert to Euler angles (ZYX order)
+            const euler = new THREE.Euler();
+            euler.setFromQuaternion(threeQuat, 'ZYX');
+            
+            // Convert to degrees
+            return {
+                roll: euler.x * 180 / Math.PI,   // Rotation around X-axis
+                pitch: euler.y * 180 / Math.PI,  // Rotation around Y-axis  
+                yaw: euler.z * 180 / Math.PI     // Rotation around Z-axis
+            };
+        }
+
+        // BLE Connection with improved reconnection support
         async function connectBLE() {
             try {
                 statusDiv.textContent = '🔵 Connecting...';
@@ -586,6 +684,9 @@
                 console.error('BLE connection error:', error);
                 statusDiv.textContent = '🔴 Connection Failed';
                 statusDiv.classList.remove('pulse');
+                
+                // Clean up on error
+                cleanupBLE();
                 alert('Failed to connect: ' + error.message);
             }
         }
@@ -599,68 +700,93 @@
             resetBtn.disabled = true;
             calibrateBtn.disabled = true;
 
-            bleDevice = null;
-            bleServer = null;
+            cleanupBLE();
+        }
+
+        function cleanupBLE() {
+            // Remove event listeners before clearing references
+            if (quaternionCharacteristic) {
+                try {
+                    quaternionCharacteristic.removeEventListener('characteristicvaluechanged', 
+                        handleQuaternionData);
+                } catch (e) {
+                    console.warn('Error removing quaternion listener:', e);
+                }
+            }
+            
+            if (eulerCharacteristic) {
+                try {
+                    eulerCharacteristic.removeEventListener('characteristicvaluechanged', 
+                        handleEulerData);
+                } catch (e) {
+                    console.warn('Error removing euler listener:', e);
+                }
+            }
+
+            // Clear references
             quaternionCharacteristic = null;
             eulerCharacteristic = null;
             controlCharacteristic = null;
+            bleServer = null;
+            
+            // Reset calibration on disconnect
+            resetZeroPoint();
+            
+            // Don't clear bleDevice here - it's managed by browser
         }
 
         async function disconnectBLE() {
             if (bleDevice && bleDevice.gatt.connected) {
-                await bleDevice.gatt.disconnect();
+                try {
+                    await bleDevice.gatt.disconnect();
+                    console.log('Disconnected successfully');
+                } catch (error) {
+                    console.error('Error during disconnect:', error);
+                }
             }
+            // onDisconnected will be called automatically
         }
 
         function handleQuaternionData(event) {
             const value = event.target.value;
             
-            // Read quaternion (w, x, y, z) - little endian
             const w = value.getFloat32(0, true);
             const x = value.getFloat32(4, true);
             const y = value.getFloat32(8, true);
             const z = value.getFloat32(12, true);
 
-            currentQuaternion = { w, x, y, z };
+            // Store raw quaternion
+            const rawQuaternion = { w, x, y, z };
+            
+            // Check if we need to set zero point
+            if (window.setZeroOnNextPacket) {
+                setZeroPoint(rawQuaternion);
+                window.setZeroOnNextPacket = false;
+            }
+            
+            // Apply zero-point calibration
+            currentQuaternion = applyZeroPointCalibration(rawQuaternion);
 
-            // Update 3D model
+            // Update 3D model with calibrated quaternion
             updateRetainerOrientation(currentQuaternion);
 
-            // Update UI
-            document.getElementById('qw').textContent = w.toFixed(3);
-            document.getElementById('qx').textContent = x.toFixed(3);
-            document.getElementById('qy').textContent = y.toFixed(3);
-            document.getElementById('qz').textContent = z.toFixed(3);
+            // Calculate and display Euler angles that match 3D rotation
+            const euler = quaternionToEulerForDisplay(currentQuaternion);
+            
+            document.getElementById('roll').textContent = euler.roll.toFixed(1) + '°';
+            document.getElementById('pitch').textContent = euler.pitch.toFixed(1) + '°';
+            document.getElementById('yaw').textContent = euler.yaw.toFixed(1) + '°';
+
+            // Update quaternion display (show calibrated values)
+            document.getElementById('qw').textContent = currentQuaternion.w.toFixed(3);
+            document.getElementById('qx').textContent = currentQuaternion.x.toFixed(3);
+            document.getElementById('qy').textContent = currentQuaternion.y.toFixed(3);
+            document.getElementById('qz').textContent = currentQuaternion.z.toFixed(3);
         }
 
         function handleEulerData(event) {
-            const value = event.target.value;
-            
-            // Read Euler angles in radians - little endian
-            const roll = value.getFloat32(0, true);
-            const pitch = value.getFloat32(4, true);
-            const yaw = value.getFloat32(8, true);
-
-            // 根据3D模型的变换规则调整Euler角度显示
-            // 3D模型: set(q.x, q.z, -q.y, q.w)
-            // 对应到Euler角度:
-            // - Roll (X轴): 保持不变 (roll)
-            // - Pitch (Y轴): 使用原来的Yaw值 (yaw)
-            // - Yaw (Z轴): 使用原来的Pitch值并取反 (-pitch)
-            currentEuler = { 
-                roll: -pitch,      // X轴保持不变
-                pitch: yaw,      // 原来的yaw变成pitch
-                yaw:   roll    // 原来的pitch取反后变成yaw
-            };
-
-            // Convert to degrees
-            const rollDeg = (-pitch * 180 / Math.PI).toFixed(1);
-            const pitchDeg = (yaw * 180 / Math.PI).toFixed(1);      // 显示原来的yaw值
-            const yawDeg = (roll * 180 / Math.PI).toFixed(1);     // 显示原来的pitch值取反
-
-            document.getElementById('roll').textContent = rollDeg + '°';
-            document.getElementById('pitch').textContent = pitchDeg + '°';
-            document.getElementById('yaw').textContent = yawDeg + '°';
+            // This function can be empty since we calculate Euler from quaternion
+            // But we keep it to maintain notification subscription
         }
 
         async function sendControlCommand(cmd) {
@@ -689,11 +815,37 @@
         });
 
         resetBtn.addEventListener('click', () => {
-            sendControlCommand(0x03); // BLE_IMU_CMD_RESET
+            if (confirm('Reset zero point calibration?')) {
+                // Reset local calibration
+                resetZeroPoint();
+                
+                // Send reset command to device
+                sendControlCommand(0x03); // BLE_IMU_CMD_RESET
+                
+                console.log('Zero point calibration reset');
+            }
         });
 
-        calibrateBtn.addEventListener('click', () => {
-            sendControlCommand(0x04); // BLE_IMU_CMD_CALIBRATE
+        calibrateBtn.addEventListener('click', async () => {
+            if (!currentQuaternion) {
+                alert('No orientation data available');
+                return;
+            }
+            
+            // Send command to device first
+            await sendControlCommand(0x05); // BLE_IMU_CMD_SET_ZERO
+            
+            // Wait a bit for device to process
+            setTimeout(() => {
+                // Set zero point in web app (using the last received raw quaternion)
+                // We need to get the raw quaternion before calibration was applied
+                // For now, we'll trigger recalibration on next data packet
+                
+                // Flag to set zero on next packet
+                window.setZeroOnNextPacket = true;
+                
+                console.log('Zero point calibration initiated');
+            }, 100);
         });
 
         // Check browser support
@@ -705,8 +857,11 @@
         // Initialize on load
         window.addEventListener('load', () => {
             initThreeJS();
-            console.log('Smart Retainer Visualizer v2.0 initialized');
-            console.log('Improvements: Gyro calibration, coordinate system fix');
+            console.log('Smart Retainer Visualizer v2.2 initialized');
+            console.log('Features:');
+            console.log('- Euler angles match 3D model rotation');
+            console.log('- BLE reconnection support');
+            console.log('- Zero-point calibration with angle reset');
         });
     </script>
 </body>
