@@ -619,7 +619,7 @@
          */
         function updateRetainerOrientation(q) {
             if (!retainerModel) return;
-            retainerModel.quaternion.set(q.x, q.z, -q.y, q.w);
+            retainerModel.quaternion.set(q.x, q.y, q.z, q.w);
             updateCount++;
         }
 
@@ -629,7 +629,7 @@
          */
         function quaternionToEulerForDisplay(q) {
             // Create Three.js quaternion with the same mapping as 3D model
-            const threeQuat = new THREE.Quaternion(q.x, q.z, -q.y, q.w);
+            const threeQuat = new THREE.Quaternion(q.x, q.y, q.z, q.w);
             
             // Convert to Euler angles (ZYX order)
             const euler = new THREE.Euler();
