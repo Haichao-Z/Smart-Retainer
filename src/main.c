@@ -140,6 +140,30 @@ static void wait_for_calibration(void)
 }
 
 /**
+ * @brief Convert quaternion to Euler angles (in radians)
+ */
+static void quaternion_to_euler(const quaternion_t *q, euler_angles_t *euler)
+{
+    // Roll (x-axis rotation)
+    float sinr_cosp = 2.0f * (q->w * q->x + q->y * q->z);
+    float cosr_cosp = 1.0f - 2.0f * (q->x * q->x + q->y * q->y);
+    euler->roll = atan2f(sinr_cosp, cosr_cosp);
+
+    // Pitch (y-axis rotation)
+    float sinp = 2.0f * (q->w * q->y - q->z * q->x);
+    if (fabsf(sinp) >= 1.0f) {
+        euler->pitch = copysignf(M_PI / 2.0f, sinp); // Use 90° if out of range
+    } else {
+        euler->pitch = asinf(sinp);
+    }
+
+    // Yaw (z-axis rotation)
+    float siny_cosp = 2.0f * (q->w * q->z + q->x * q->y);
+    float cosy_cosp = 1.0f - 2.0f * (q->y * q->y + q->z * q->z);
+    euler->yaw = atan2f(siny_cosp, cosy_cosp);
+}
+
+/**
  * @brief Convert BNO055 data to attitude structure with offset correction
  */
 static void bno055_to_attitude(const bno055_data_t *bno_data, attitude_t *attitude)
@@ -156,10 +180,8 @@ static void bno055_to_attitude(const bno055_data_t *bno_data, attitude_t *attitu
     attitude->quaternion.z = corrected_quat.z;
 
     /* Convert Euler angles to radians */
-    attitude->euler.roll = bno_data->euler.roll * M_PI / 180.0f;
-    attitude->euler.pitch = bno_data->euler.pitch * M_PI / 180.0f;
-    attitude->euler.yaw = bno_data->euler.heading * M_PI / 180.0f;
-
+    quaternion_to_euler(&attitude->quaternion, &attitude->euler);
+    
     attitude->timestamp = bno_data->timestamp;
 }
 
