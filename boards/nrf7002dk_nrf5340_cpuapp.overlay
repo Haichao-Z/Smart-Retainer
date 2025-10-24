@@ -67,7 +67,7 @@
 &i2c1 {
     compatible = "nordic,nrf-twim";
     status = "okay";
-    clock-frequency = <I2C_BITRATE_FAST_PLUS>; /* 100 kHz for BNO055 */
+    clock-frequency = <I2C_BITRATE_FAST>; /* 100 kHz for BNO055 */
 
     bno055: bno055@28 {
         compatible = "bosch,bno055";

@@ -1,71 +1,105 @@
 /**
  * @file orientation_offset.h
- * @brief 姿态零点校准 - 解决初始姿态偏移问题
+ * @brief Enhanced orientation offset management header
  */
 
 #ifndef ORIENTATION_OFFSET_H
 #define ORIENTATION_OFFSET_H
 
-#include <zephyr/kernel.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include "bno055_driver.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
- * @brief 四元数结构（用于存储偏移量）
- */
+/* Offset quaternion type (same as BNO055 quaternion) */
 typedef struct {
-    float w, x, y, z;
+    float w;
+    float x;
+    float y;
+    float z;
 } quaternion_offset_t;
 
+/* Statistics structure for monitoring */
+typedef struct {
+    uint32_t samples_processed;
+    uint32_t drift_corrections;
+    float last_norm_deviation;
+    float offset_w;
+    float offset_x;
+    float offset_y;
+    float offset_z;
+} orientation_stats_t;
+
 /**
- * @brief 初始化姿态偏移系统
+ * @brief Initialize the orientation offset system
  */
 void orientation_offset_init(void);
 
 /**
- * @brief 设置当前姿态为零点
+ * @brief Set current orientation as zero reference point
  * 
- * 用户佩戴好牙套并摆正姿势后调用此函数
- * 
- * @param current_quat 当前的四元数姿态
- * @return 0 成功, 负数失败
+ * @param current_quat Current quaternion from BNO055
+ * @return 0 on success, negative error code on failure
  */
 int orientation_offset_set_zero(const bno055_quaternion_t *current_quat);
 
 /**
- * @brief 应用偏移校正到姿态数据
+ * @brief Set zero reference using averaged samples
  * 
- * @param raw_quat 原始四元数（从IMU读取）
- * @param corrected_quat 校正后的四元数（输出）
+ * @param samples Array of quaternion samples
+ * @param num_samples Number of samples to average
+ * @return 0 on success, negative error code on failure
  */
-void orientation_offset_apply(const bno055_quaternion_t *raw_quat, 
+int orientation_offset_set_zero_averaged(const bno055_quaternion_t *samples, 
+                                         int num_samples);
+
+/**
+ * @brief Apply offset correction to raw quaternion
+ * 
+ * @param raw_quat Input quaternion from sensor
+ * @param corrected_quat Output corrected quaternion
+ */
+void orientation_offset_apply(const bno055_quaternion_t *raw_quat,
                               bno055_quaternion_t *corrected_quat);
 
 /**
- * @brief 重置偏移量（恢复到单位四元数）
+ * @brief Reset offset to identity (no correction)
  */
 void orientation_offset_reset(void);
 
 /**
- * @brief 检查是否已设置偏移量
+ * @brief Check if offset has been set
+ * 
+ * @return true if offset is set, false otherwise
  */
 bool orientation_offset_is_set(void);
 
 /**
- * @brief 保存偏移量到持久化存储（可选）
+ * @brief Get statistics about offset operation
+ * 
+ * @param stats Pointer to statistics structure
+ * @return 0 on success, negative error code on failure
+ */
+int orientation_offset_get_stats(orientation_stats_t *stats);
+
+/**
+ * @brief Save current offset to persistent storage
+ * 
+ * @return 0 on success, negative error code on failure
  */
 int orientation_offset_save(void);
 
 /**
- * @brief 从持久化存储加载偏移量（可选）
+ * @brief Load saved offset from persistent storage
+ * 
+ * @return 0 on success, negative error code on failure
  */
 int orientation_offset_load(void);
 
-#ifdef __cplusplus
-}
-#endif
+/**
+ * @brief Clear saved offset from storage
+ * 
+ * @return 0 on success, negative error code on failure
+ */
+int orientation_offset_clear_storage(void);
 
 #endif /* ORIENTATION_OFFSET_H */

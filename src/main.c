@@ -1,6 +1,13 @@
 /**
  * @file main.c
- * @brief Smart Retainer with BNO055 IMU and Zero-Point Calibration
+ * @brief Smart Retainer with Enhanced BNO055 IMU - Drift Prevention Version
+ * 
+ * Key improvements:
+ * - Full sensor calibration before operation
+ * - Averaged zero-point calibration
+ * - External crystal oscillator support
+ * - Calibration persistence
+ * - Better drift detection and compensation
  */
 
 #include <zephyr/kernel.h>
@@ -31,6 +38,10 @@ static struct gpio_callback button_cb_data;
 #define IMU_SAMPLE_RATE_HZ      100
 #define IMU_SAMPLE_PERIOD_MS    (1000 / IMU_SAMPLE_RATE_HZ)
 
+/* Zero-point calibration settings */
+#define ZERO_CALIB_SAMPLES      20    /* Number of samples to average */
+#define ZERO_CALIB_DELAY_MS     50    /* Delay between samples */
+
 /* Thread stack */
 #define IMU_THREAD_STACK_SIZE   4096
 #define IMU_THREAD_PRIORITY     5
@@ -41,8 +52,18 @@ static struct k_thread imu_thread_data;
 /* LED blink state */
 static bool led_state = false;
 
-/* Flag for zero-point calibration request */
-static volatile bool calibrate_zero_point = false;
+/* Flags */
+volatile bool calibrate_zero_point = false;
+static volatile bool save_calibration = false;
+
+/* Statistics tracking */
+static struct {
+    uint32_t total_samples;
+    uint32_t valid_samples;
+    uint32_t invalid_samples;
+    float max_norm_deviation;
+    uint32_t last_calib_save_time;
+} system_stats = {0};
 
 /**
  * @brief BLE control command handler
@@ -60,9 +81,27 @@ static void ble_control_handler(uint8_t cmd)
         orientation_offset_reset();
         break;
         
+    case BLE_IMU_CMD_CALIBRATE:
+        LOG_INF("Sensor calibration requested via BLE");
+        save_calibration = true;
+        break;
+        
     default:
         LOG_DBG("Unhandled BLE command: 0x%02x", cmd);
         break;
+    }
+}
+
+/**
+ * @brief Flash LED pattern
+ */
+static void led_flash_pattern(int count, int delay_ms)
+{
+    for (int i = 0; i < count; i++) {
+        gpio_pin_set_dt(&led, 1);
+        k_msleep(delay_ms);
+        gpio_pin_set_dt(&led, 0);
+        k_msleep(delay_ms);
     }
 }
 
@@ -72,6 +111,27 @@ static void ble_control_handler(uint8_t cmd)
 static void button_pressed(const struct device *dev, struct gpio_callback *cb, 
                           uint32_t pins)
 {
+    static uint32_t last_press = 0;
+    uint32_t current = k_uptime_get_32();
+    
+    /* Debounce: ignore presses within 200ms */
+    if (current - last_press < 200) {
+        return;
+    }
+    last_press = current;
+    
+    /* Check for long press (>2 seconds) for calibration save */
+    if (gpio_pin_get_dt(&button) == 1) {
+        k_msleep(2000);
+        if (gpio_pin_get_dt(&button) == 1) {
+            LOG_INF("💾 Long press detected - saving calibration");
+            save_calibration = true;
+            led_flash_pattern(5, 100);
+            return;
+        }
+    }
+    
+    /* Short press for zero-point calibration */
     calibrate_zero_point = true;
     LOG_INF("🎯 Zero-point calibration requested!");
 }
@@ -89,78 +149,42 @@ static void led_heartbeat(void)
 }
 
 /**
- * @brief Flash LED pattern
+ * @brief Display calibration status with guidance
  */
-static void led_flash_pattern(int count, int delay_ms)
+static void display_calibration_status(const bno055_calibration_t *calib)
 {
-    for (int i = 0; i < count; i++) {
-        gpio_pin_set_dt(&led, 1);
-        k_msleep(delay_ms);
-        gpio_pin_set_dt(&led, 0);
-        k_msleep(delay_ms);
+    LOG_INF("Calibration Status:");
+    LOG_INF("  System:  [%s%s%s] %d/3", 
+            calib->sys >= 1 ? "■" : "□",
+            calib->sys >= 2 ? "■" : "□",
+            calib->sys >= 3 ? "■" : "□",
+            calib->sys);
+    LOG_INF("  Gyro:    [%s%s%s] %d/3", 
+            calib->gyro >= 1 ? "■" : "□",
+            calib->gyro >= 2 ? "■" : "□",
+            calib->gyro >= 3 ? "■" : "□",
+            calib->gyro);
+    LOG_INF("  Accel:   [%s%s%s] %d/3", 
+            calib->accel >= 1 ? "■" : "□",
+            calib->accel >= 2 ? "■" : "□",
+            calib->accel >= 3 ? "■" : "□",
+            calib->accel);
+    LOG_INF("  Mag:     [%s%s%s] %d/3", 
+            calib->mag >= 1 ? "■" : "□",
+            calib->mag >= 2 ? "■" : "□",
+            calib->mag >= 3 ? "■" : "□",
+            calib->mag);
+    
+    /* Provide specific guidance for uncalibrated sensors */
+    if (calib->gyro < 3) {
+        LOG_INF("  → Gyro: Keep device completely still");
     }
-}
-
-/**
- * @brief Wait for BNO055 calibration
- */
-static void wait_for_calibration(void)
-{
-    bno055_calibration_t calib;
-    bool calibrated = false;
-    int led_counter = 0;
-
-    LOG_INF("=== BNO055 CALIBRATION ===");
-    LOG_INF("Move device in figure-8 pattern for magnetometer");
-    LOG_INF("Rotate around all axes for gyroscope");
-    LOG_INF("Place on stable surface for accelerometer");
-
-    while (!calibrated) {
-        if (bno055_get_calibration(&calib) == 0) {
-            LOG_INF("Calibration: Sys=%d Gyro=%d Accel=%d Mag=%d",
-                    calib.sys, calib.gyro, calib.accel, calib.mag);
-
-            if (calib.sys >= 2 && calib.gyro >= 2 && 
-                calib.accel >= 2 && calib.mag >= 2) {
-                calibrated = true;
-                LOG_INF("Calibration sufficient!");
-            }
-        }
-
-        led_counter++;
-        if (led_counter >= 5) {
-            led_heartbeat();
-            led_counter = 0;
-        }
-
-        k_msleep(200);
+    if (calib->accel < 3) {
+        LOG_INF("  → Accel: Place in 6 different orientations");
     }
-
-    led_flash_pattern(6, 100);
-}
-
-/**
- * @brief Convert quaternion to Euler angles (in radians)
- */
-static void quaternion_to_euler(const quaternion_t *q, euler_angles_t *euler)
-{
-    // Roll (x-axis rotation)
-    float sinr_cosp = 2.0f * (q->w * q->x + q->y * q->z);
-    float cosr_cosp = 1.0f - 2.0f * (q->x * q->x + q->y * q->y);
-    euler->roll = atan2f(sinr_cosp, cosr_cosp);
-
-    // Pitch (y-axis rotation)
-    float sinp = 2.0f * (q->w * q->y - q->z * q->x);
-    if (fabsf(sinp) >= 1.0f) {
-        euler->pitch = copysignf(M_PI / 2.0f, sinp); // Use 90° if out of range
-    } else {
-        euler->pitch = asinf(sinp);
+    if (calib->mag < 3) {
+        LOG_INF("  → Mag: Move in figure-8 pattern away from metal");
     }
-
-    // Yaw (z-axis rotation)
-    float siny_cosp = 2.0f * (q->w * q->z + q->x * q->y);
-    float cosy_cosp = 1.0f - 2.0f * (q->y * q->y + q->z * q->z);
-    euler->yaw = atan2f(siny_cosp, cosy_cosp);
 }
 
 /**
@@ -170,8 +194,29 @@ static void bno055_to_attitude(const bno055_data_t *bno_data, attitude_t *attitu
 {
     bno055_quaternion_t corrected_quat;
     
+     /* 检查输入数据有效性 */
+    if (!bno_data || !attitude) {
+        return;
+    }
+
     /* Apply orientation offset correction */
     orientation_offset_apply(&bno_data->quaternion, &corrected_quat);
+    
+    /* Validate quaternion */
+    float norm = sqrtf(corrected_quat.w * corrected_quat.w + 
+                      corrected_quat.x * corrected_quat.x +
+                      corrected_quat.y * corrected_quat.y + 
+                      corrected_quat.z * corrected_quat.z);
+    
+    if (fabsf(norm - 1.0f) > 0.01f) {
+        system_stats.invalid_samples++;
+        if (fabsf(norm - 1.0f) > system_stats.max_norm_deviation) {
+            system_stats.max_norm_deviation = fabsf(norm - 1.0f);
+        }
+        LOG_DBG("Quaternion norm deviation: %.6f", fabsf(norm - 1.0f));
+    } else {
+        system_stats.valid_samples++;
+    }
     
     /* Copy corrected quaternion */
     attitude->quaternion.w = corrected_quat.w;
@@ -179,57 +224,124 @@ static void bno055_to_attitude(const bno055_data_t *bno_data, attitude_t *attitu
     attitude->quaternion.y = corrected_quat.y;
     attitude->quaternion.z = corrected_quat.z;
 
-    /* Convert Euler angles to radians */
-    quaternion_to_euler(&attitude->quaternion, &attitude->euler);
-    
+    /* Convert Euler angles to radians if needed */
+    if (bno_data->euler.heading <= 360.0f) {  /* Degrees */
+        attitude->euler.roll = bno_data->euler.roll * M_PI / 180.0f;
+        attitude->euler.pitch = bno_data->euler.pitch * M_PI / 180.0f;
+        attitude->euler.yaw = bno_data->euler.heading * M_PI / 180.0f;
+    } else {  /* Already in radians */
+        attitude->euler.roll = bno_data->euler.roll;
+        attitude->euler.pitch = bno_data->euler.pitch;
+        attitude->euler.yaw = bno_data->euler.heading;
+    }
+
     attitude->timestamp = bno_data->timestamp;
 }
 
 /**
- * @brief Perform zero-point calibration
+ * @brief Perform averaged zero-point calibration
  */
 static void perform_zero_point_calibration(void)
 {
+    bno055_quaternion_t samples[ZERO_CALIB_SAMPLES];
     bno055_data_t bno_data;
     int err;
+    int valid_samples = 0;
     
     LOG_INF("");
-    LOG_INF("════════════════════════════════════════");
-    LOG_INF("🎯 ZERO-POINT CALIBRATION");
-    LOG_INF("════════════════════════════════════════");
-    LOG_INF("📋 Instructions:");
-    LOG_INF("   1. Wear the retainer comfortably");
-    LOG_INF("   2. Look straight ahead at the screen");
-    LOG_INF("   3. Keep your head still");
-    LOG_INF("");
-    LOG_INF("⏳ Calibrating in 3 seconds...");
+    LOG_INF("╔══════════════════════════════════════╗");
+    LOG_INF("║    🎯 ZERO-POINT CALIBRATION         ║");
+    LOG_INF("╠══════════════════════════════════════╣");
+    LOG_INF("║ 📋 Instructions:                     ║");
+    LOG_INF("║   1. Wear the retainer comfortably   ║");
+    LOG_INF("║   2. Look straight ahead at screen   ║");
+    LOG_INF("║   3. Keep your head still            ║");
+    LOG_INF("║                                      ║");
+    LOG_INF("║ ⏳ Sampling %d points...             ║", ZERO_CALIB_SAMPLES);
+    LOG_INF("╚══════════════════════════════════════╝");
     
     /* Flash LED to indicate calibration starting */
     led_flash_pattern(3, 300);
-    k_msleep(1000);
     
-    /* Read current orientation */
-    err = bno055_read_all(&bno_data);
-    if (err) {
-        LOG_ERR("❌ Failed to read IMU data: %d", err);
+    /* Collect samples */
+    for (int i = 0; i < ZERO_CALIB_SAMPLES; i++) {
+        err = bno055_read_all(&bno_data);
+        if (err) {
+            LOG_WRN("Failed to read sample %d: %d", i, err);
+            continue;
+        }
+        
+        /* Check calibration status */
+        if (bno_data.calibration.sys == 0) {
+            LOG_WRN("System uncalibrated, sample may be unreliable");
+        }
+        
+        samples[valid_samples] = bno_data.quaternion;
+        valid_samples++;
+        
+        /* Show progress */
+        if ((i + 1) % 5 == 0) {
+            LOG_INF("  Progress: %d/%d samples", i + 1, ZERO_CALIB_SAMPLES);
+        }
+        
+        k_msleep(ZERO_CALIB_DELAY_MS);
+    }
+    
+    if (valid_samples < 5) {
+        LOG_ERR("❌ Insufficient valid samples (%d/%d)", 
+                valid_samples, ZERO_CALIB_SAMPLES);
+        led_flash_pattern(10, 100);  /* Error pattern */
         return;
     }
     
-    /* Set current orientation as zero point */
-    err = orientation_offset_set_zero(&bno_data.quaternion);
+    /* Set averaged zero point */
+    err = orientation_offset_set_zero_averaged(samples, valid_samples);
     if (err) {
         LOG_ERR("❌ Failed to set zero point: %d", err);
+        led_flash_pattern(10, 100);  /* Error pattern */
         return;
     }
+    
+    /* Get and display offset statistics */
+    orientation_stats_t stats;
+    orientation_offset_get_stats(&stats);
     
     LOG_INF("");
     LOG_INF("✅ Zero-point calibration complete!");
+    LOG_INF("   Samples used: %d", valid_samples);
+    LOG_INF("   Offset quaternion: (%.4f, %.4f, %.4f, %.4f)",
+            (double)stats.offset_w, (double)stats.offset_x,
+            (double)stats.offset_y, (double)stats.offset_z);
     LOG_INF("   Current orientation is now the reference");
-    LOG_INF("════════════════════════════════════════");
+    LOG_INF("╚══════════════════════════════════════╝");
     LOG_INF("");
     
     /* Success pattern: rapid flash */
     led_flash_pattern(10, 50);
+}
+
+/**
+ * @brief Save sensor calibration
+ */
+static void save_sensor_calibration(void)
+{
+    int err;
+    
+    if (!bno055_is_fully_calibrated()) {
+        LOG_WRN("Cannot save - sensor not fully calibrated");
+        display_calibration_status(&(bno055_calibration_t){0});
+        return;
+    }
+    
+    err = bno055_save_calibration_profile();
+    if (err) {
+        LOG_ERR("Failed to save calibration: %d", err);
+        return;
+    }
+    
+    system_stats.last_calib_save_time = k_uptime_get_32();
+    LOG_INF("💾 Sensor calibration saved successfully");
+    led_flash_pattern(3, 200);
 }
 
 /**
@@ -245,10 +357,11 @@ static void imu_thread(void *p1, void *p2, void *p3)
     attitude_t attitude;
     int err;
     uint32_t led_counter = 0;
+    uint32_t stats_counter = 0;
 
     LOG_INF("IMU thread started");
 
-    /* Wait for initial calibration */
+    /* Wait for initial stabilization */
     k_msleep(1000);
 
     while (1) {
@@ -256,6 +369,12 @@ static void imu_thread(void *p1, void *p2, void *p3)
         if (calibrate_zero_point) {
             calibrate_zero_point = false;
             perform_zero_point_calibration();
+        }
+        
+        /* Check if calibration save requested */
+        if (save_calibration) {
+            save_calibration = false;
+            save_sensor_calibration();
         }
 
         /* Read all BNO055 data */
@@ -265,6 +384,8 @@ static void imu_thread(void *p1, void *p2, void *p3)
             k_msleep(IMU_SAMPLE_PERIOD_MS);
             continue;
         }
+        
+        system_stats.total_samples++;
 
         /* Convert to attitude structure (with offset correction) */
         bno055_to_attitude(&bno_data, &attitude);
@@ -282,24 +403,48 @@ static void imu_thread(void *p1, void *p2, void *p3)
             }
         }
 
-        /* LED heartbeat at 1 Hz */
+        /* LED heartbeat and logging at 1 Hz */
         led_counter++;
         if (led_counter >= IMU_SAMPLE_RATE_HZ) {
             led_heartbeat();
             led_counter = 0;
             
             /* Log current orientation */
-            LOG_INF("Orientation: R=%.1f° P=%.1f° Y=%.1f° | Q[%.3f,%.3f,%.3f,%.3f] | %s",
-                    roll_deg, pitch_deg, yaw_deg,
+            LOG_INF("Orientation: R=%.1f° P=%.1f° Y=%.1f° | "
+                    "Q[%.3f,%.3f,%.3f,%.3f] | Cal[%d%d%d%d] | %s",
+                    (double)roll_deg, (double)pitch_deg, (double)yaw_deg,
                     (double)attitude.quaternion.w,
                     (double)attitude.quaternion.x,
                     (double)attitude.quaternion.y,
                     (double)attitude.quaternion.z,
-                    orientation_offset_is_set() ? "CALIBRATED" : "UNCALIBRATED");
-
-            LOG_INF("Calibration: Sys=%d Gyro=%d Accel=%d Mag=%d",
                     bno_data.calibration.sys, bno_data.calibration.gyro,
-                    bno_data.calibration.accel, bno_data.calibration.mag);
+                    bno_data.calibration.accel, bno_data.calibration.mag,
+                    orientation_offset_is_set() ? "ZEROED" : "RELATIVE");
+        }
+        
+        /* Display statistics every 30 seconds */
+        stats_counter++;
+        if (stats_counter >= IMU_SAMPLE_RATE_HZ * 30) {
+            stats_counter = 0;
+            
+            orientation_stats_t offset_stats;
+            orientation_offset_get_stats(&offset_stats);
+            
+            LOG_INF("=== System Statistics ===");
+            LOG_INF("  Total samples: %lu", system_stats.total_samples);
+            LOG_INF("  Valid samples: %lu (%.1f%%)", 
+                    system_stats.valid_samples,
+                    (double)(system_stats.valid_samples * 100.0f / 
+                            system_stats.total_samples));
+            LOG_INF("  Max norm deviation: %.6f", 
+                    (double)system_stats.max_norm_deviation);
+            LOG_INF("  Drift corrections: %lu", 
+                    offset_stats.drift_corrections);
+            
+            if (!bno055_is_fully_calibrated()) {
+                LOG_WRN("Sensor not fully calibrated!");
+                display_calibration_status(&bno_data.calibration);
+            }
         }
 
         k_msleep(IMU_SAMPLE_PERIOD_MS);
@@ -313,7 +458,7 @@ static int system_init(void)
 {
     int err;
 
-    LOG_INF("=== Smart Retainer Initialization (BNO055) ===");
+    LOG_INF("=== Smart Retainer Initialization (Enhanced) ===");
 
     /* Initialize LED */
     if (device_is_ready(led.port)) {
@@ -336,7 +481,9 @@ static int system_init(void)
             } else {
                 gpio_init_callback(&button_cb_data, button_pressed, BIT(button.pin));
                 gpio_add_callback(button.port, &button_cb_data);
-                LOG_INF("[2/6] Button initialized (press to set zero point)");
+                LOG_INF("[2/6] Button initialized");
+                LOG_INF("  - Short press: Set zero point");
+                LOG_INF("  - Long press (2s): Save calibration");
             }
         }
     }
@@ -345,13 +492,16 @@ static int system_init(void)
     orientation_offset_init();
     LOG_INF("[3/6] Orientation offset system initialized");
 
-    /* Initialize BNO055 */
+    /* Initialize BNO055 with enhanced configuration */
     bno055_config_t bno_config = {
         .address = BNO055_ADDRESS_A,
         .mode = BNO055_OPERATION_MODE_NDOF,
-        .use_external_crystal = false,
-        .units_in_radians = false
+        .use_external_crystal = true,  /* Enable for better accuracy */
+        .units_in_radians = false      /* Use degrees internally */
     };
+
+    /* Enable auto-save of calibration */
+    bno055_enable_auto_calibration_save(true);
 
     err = bno055_init(&bno_config);
     if (err) {
@@ -360,9 +510,13 @@ static int system_init(void)
     }
     LOG_INF("[4/6] BNO055 initialized in NDOF mode");
 
-    /* Wait for calibration */
-    wait_for_calibration();
-    LOG_INF("[5/6] BNO055 calibrated");
+    /* Try to load saved calibration profile */
+    err = bno055_load_calibration_profile();
+    if (err == 0) {
+        LOG_INF("[5/6] Loaded saved calibration profile");
+    } else {
+        LOG_INF("[5/6] No saved calibration, using auto-calibration");
+    }
 
     /* Initialize BLE service */
     k_msleep(100);
@@ -380,10 +534,12 @@ static int system_init(void)
 
     LOG_INF("=== Initialization Complete ===");
     LOG_INF("");
-    LOG_INF("💡 USAGE:");
-    LOG_INF("   • Wear the retainer");
+    LOG_INF("💡 USAGE INSTRUCTIONS:");
+    LOG_INF("   • Wear the retainer comfortably");
     LOG_INF("   • Look straight at screen");
-    LOG_INF("   • Press Button 1 to set zero point");
+    LOG_INF("   • Press Button 1 (short) to set zero point");
+    LOG_INF("   • Press Button 1 (long 2s) to save calibration");
+    LOG_INF("   • Use BLE app for remote control");
     LOG_INF("");
     
     return 0;
@@ -396,14 +552,30 @@ int main(void)
 {
     int err;
 
-    LOG_INF("=== Smart Retainer MVP v3.1 (BNO055 + Zero-Point) ===");
-    LOG_INF("Build: " __DATE__ " " __TIME__);
+    LOG_INF("╔════════════════════════════════════════╗");
+    LOG_INF("║  Smart Retainer MVP v4.0 (Enhanced)   ║");
+    LOG_INF("║  BNO055 + Drift Prevention            ║");
+    LOG_INF("╠════════════════════════════════════════╣");
+    LOG_INF("║  Build: " __DATE__ " " __TIME__ "      ║");
+    LOG_INF("╚════════════════════════════════════════╝");
 
     err = system_init();
     if (err) {
         LOG_ERR("System initialization failed: %d", err);
+        
+        /* Flash error pattern */
+        if (device_is_ready(led.port)) {
+            while (1) {
+                led_flash_pattern(3, 100);
+                k_msleep(2000);
+            }
+        }
         return err;
     }
+
+    /* Perform initial self-test */
+    LOG_INF("Performing sensor self-test...");
+    bno055_self_test();
 
     /* Create IMU processing thread */
     k_thread_create(&imu_thread_data, imu_thread_stack,
@@ -414,7 +586,8 @@ int main(void)
 
     k_thread_name_set(&imu_thread_data, "imu_thread");
 
-    LOG_INF("Smart Retainer started successfully");
+    LOG_INF("✅ Smart Retainer started successfully");
+    LOG_INF("🔄 System ready for operation");
     
     return 0;
 }

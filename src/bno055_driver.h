@@ -1,72 +1,171 @@
 /**
  * @file bno055_driver.h
- * @brief BNO055 9-DOF IMU driver interface
- * 
- * BNO055 provides built-in sensor fusion with quaternion output
+ * @brief BNO055 IMU driver header with enhanced features
  */
 
 #ifndef BNO055_DRIVER_H
 #define BNO055_DRIVER_H
 
-#include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/i2c.h>
+#include <stdbool.h>
+#include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* BNO055 I2C addresses */
+#define BNO055_ADDRESS_A    0x28
+#define BNO055_ADDRESS_B    0x29
+#define BNO055_ID           0xA0
 
-/* BNO055 I2C Addresses */
-#define BNO055_ADDRESS_A                0x28
-#define BNO055_ADDRESS_B                0x29
-#define BNO055_ID                       0xA0
+/* BNO055 Register Map */
+#define BNO055_CHIP_ID_ADDR         0x00
+#define BNO055_ACCEL_REV_ID_ADDR    0x01
+#define BNO055_MAG_REV_ID_ADDR      0x02
+#define BNO055_GYRO_REV_ID_ADDR     0x03
+#define BNO055_SW_REV_ID_LSB_ADDR   0x04
+#define BNO055_SW_REV_ID_MSB_ADDR   0x05
+#define BNO055_BL_REV_ID_ADDR       0x06
 
-/* Register Map */
-#define BNO055_CHIP_ID_ADDR             0x00
-#define BNO055_PAGE_ID_ADDR             0x07
+/* Page ID register */
+#define BNO055_PAGE_ID_ADDR         0x07
+
+/* Accelerometer data registers */
 #define BNO055_ACCEL_DATA_X_LSB_ADDR    0x08
+#define BNO055_ACCEL_DATA_X_MSB_ADDR    0x09
+#define BNO055_ACCEL_DATA_Y_LSB_ADDR    0x0A
+#define BNO055_ACCEL_DATA_Y_MSB_ADDR    0x0B
+#define BNO055_ACCEL_DATA_Z_LSB_ADDR    0x0C
+#define BNO055_ACCEL_DATA_Z_MSB_ADDR    0x0D
+
+/* Magnetometer data registers */
 #define BNO055_MAG_DATA_X_LSB_ADDR      0x0E
+#define BNO055_MAG_DATA_X_MSB_ADDR      0x0F
+#define BNO055_MAG_DATA_Y_LSB_ADDR      0x10
+#define BNO055_MAG_DATA_Y_MSB_ADDR      0x11
+#define BNO055_MAG_DATA_Z_LSB_ADDR      0x12
+#define BNO055_MAG_DATA_Z_MSB_ADDR      0x13
+
+/* Gyroscope data registers */
 #define BNO055_GYRO_DATA_X_LSB_ADDR     0x14
-#define BNO055_EULER_H_LSB_ADDR         0x1A
-#define BNO055_QUATERNION_DATA_W_LSB_ADDR 0x20
+#define BNO055_GYRO_DATA_X_MSB_ADDR     0x15
+#define BNO055_GYRO_DATA_Y_LSB_ADDR     0x16
+#define BNO055_GYRO_DATA_Y_MSB_ADDR     0x17
+#define BNO055_GYRO_DATA_Z_LSB_ADDR     0x18
+#define BNO055_GYRO_DATA_Z_MSB_ADDR     0x19
+
+/* Euler data registers */
+#define BNO055_EULER_H_LSB_ADDR     0x1A
+#define BNO055_EULER_H_MSB_ADDR     0x1B
+#define BNO055_EULER_R_LSB_ADDR     0x1C
+#define BNO055_EULER_R_MSB_ADDR     0x1D
+#define BNO055_EULER_P_LSB_ADDR     0x1E
+#define BNO055_EULER_P_MSB_ADDR     0x1F
+
+/* Quaternion data registers */
+#define BNO055_QUATERNION_DATA_W_LSB_ADDR  0x20
+#define BNO055_QUATERNION_DATA_W_MSB_ADDR  0x21
+#define BNO055_QUATERNION_DATA_X_LSB_ADDR  0x22
+#define BNO055_QUATERNION_DATA_X_MSB_ADDR  0x23
+#define BNO055_QUATERNION_DATA_Y_LSB_ADDR  0x24
+#define BNO055_QUATERNION_DATA_Y_MSB_ADDR  0x25
+#define BNO055_QUATERNION_DATA_Z_LSB_ADDR  0x26
+#define BNO055_QUATERNION_DATA_Z_MSB_ADDR  0x27
+
+/* Linear acceleration data registers */
 #define BNO055_LINEAR_ACCEL_DATA_X_LSB_ADDR 0x28
-#define BNO055_GRAVITY_DATA_X_LSB_ADDR  0x2E
-#define BNO055_TEMP_ADDR                0x34
-#define BNO055_CALIB_STAT_ADDR          0x35
-#define BNO055_SYS_STATUS_ADDR          0x39
-#define BNO055_SYS_ERR_ADDR             0x3A
-#define BNO055_UNIT_SEL_ADDR            0x3B
-#define BNO055_OPR_MODE_ADDR            0x3D
-#define BNO055_PWR_MODE_ADDR            0x3E
-#define BNO055_SYS_TRIGGER_ADDR         0x3F
-#define BNO055_AXIS_MAP_CONFIG_ADDR     0x41
-#define BNO055_AXIS_MAP_SIGN_ADDR       0x42
+#define BNO055_LINEAR_ACCEL_DATA_X_MSB_ADDR 0x29
+#define BNO055_LINEAR_ACCEL_DATA_Y_LSB_ADDR 0x2A
+#define BNO055_LINEAR_ACCEL_DATA_Y_MSB_ADDR 0x2B
+#define BNO055_LINEAR_ACCEL_DATA_Z_LSB_ADDR 0x2C
+#define BNO055_LINEAR_ACCEL_DATA_Z_MSB_ADDR 0x2D
 
-/* Operation Modes */
-typedef enum {
-    BNO055_OPERATION_MODE_CONFIG        = 0x00,
-    BNO055_OPERATION_MODE_ACCONLY       = 0x01,
-    BNO055_OPERATION_MODE_MAGONLY       = 0x02,
-    BNO055_OPERATION_MODE_GYRONLY       = 0x03,
-    BNO055_OPERATION_MODE_ACCMAG        = 0x04,
-    BNO055_OPERATION_MODE_ACCGYRO       = 0x05,
-    BNO055_OPERATION_MODE_MAGGYRO       = 0x06,
-    BNO055_OPERATION_MODE_AMG           = 0x07,
-    BNO055_OPERATION_MODE_IMUPLUS       = 0x08,
-    BNO055_OPERATION_MODE_COMPASS       = 0x09,
-    BNO055_OPERATION_MODE_M4G           = 0x0A,
-    BNO055_OPERATION_MODE_NDOF_FMC_OFF  = 0x0B,
-    BNO055_OPERATION_MODE_NDOF          = 0x0C
-} bno055_opmode_t;
+/* Gravity data registers */
+#define BNO055_GRAVITY_DATA_X_LSB_ADDR      0x2E
+#define BNO055_GRAVITY_DATA_X_MSB_ADDR      0x2F
+#define BNO055_GRAVITY_DATA_Y_LSB_ADDR      0x30
+#define BNO055_GRAVITY_DATA_Y_MSB_ADDR      0x31
+#define BNO055_GRAVITY_DATA_Z_LSB_ADDR      0x32
+#define BNO055_GRAVITY_DATA_Z_MSB_ADDR      0x33
 
-/* Power Modes */
+/* Temperature register */
+#define BNO055_TEMP_ADDR            0x34
+
+/* Status registers */
+#define BNO055_CALIB_STAT_ADDR      0x35
+#define BNO055_SELFTEST_RESULT_ADDR 0x36
+#define BNO055_INTR_STAT_ADDR       0x37
+#define BNO055_SYS_CLK_STAT_ADDR    0x38
+#define BNO055_SYS_STATUS_ADDR      0x39
+#define BNO055_SYS_ERR_ADDR         0x3A
+#define BNO055_UNIT_SEL_ADDR        0x3B
+
+/* Mode registers */
+#define BNO055_OPR_MODE_ADDR        0x3D
+#define BNO055_PWR_MODE_ADDR        0x3E
+#define BNO055_SYS_TRIGGER_ADDR     0x3F
+#define BNO055_TEMP_SOURCE_ADDR     0x40
+
+/* Axis remap registers */
+#define BNO055_AXIS_MAP_CONFIG_ADDR 0x41
+#define BNO055_AXIS_MAP_SIGN_ADDR   0x42
+
+/* Calibration offset registers */
+#define BNO055_ACCEL_OFFSET_X_LSB_ADDR  0x55
+#define BNO055_ACCEL_OFFSET_X_MSB_ADDR  0x56
+#define BNO055_ACCEL_OFFSET_Y_LSB_ADDR  0x57
+#define BNO055_ACCEL_OFFSET_Y_MSB_ADDR  0x58
+#define BNO055_ACCEL_OFFSET_Z_LSB_ADDR  0x59
+#define BNO055_ACCEL_OFFSET_Z_MSB_ADDR  0x5A
+
+#define BNO055_MAG_OFFSET_X_LSB_ADDR    0x5B
+#define BNO055_MAG_OFFSET_X_MSB_ADDR    0x5C
+#define BNO055_MAG_OFFSET_Y_LSB_ADDR    0x5D
+#define BNO055_MAG_OFFSET_Y_MSB_ADDR    0x5E
+#define BNO055_MAG_OFFSET_Z_LSB_ADDR    0x5F
+#define BNO055_MAG_OFFSET_Z_MSB_ADDR    0x60
+
+#define BNO055_GYRO_OFFSET_X_LSB_ADDR   0x61
+#define BNO055_GYRO_OFFSET_X_MSB_ADDR   0x62
+#define BNO055_GYRO_OFFSET_Y_LSB_ADDR   0x63
+#define BNO055_GYRO_OFFSET_Y_MSB_ADDR   0x64
+#define BNO055_GYRO_OFFSET_Z_LSB_ADDR   0x65
+#define BNO055_GYRO_OFFSET_Z_MSB_ADDR   0x66
+
+#define BNO055_ACCEL_RADIUS_LSB_ADDR    0x67
+#define BNO055_ACCEL_RADIUS_MSB_ADDR    0x68
+#define BNO055_MAG_RADIUS_LSB_ADDR      0x69
+#define BNO055_MAG_RADIUS_MSB_ADDR      0x6A
+
+/* Power modes */
 typedef enum {
-    BNO055_POWER_MODE_NORMAL            = 0x00,
-    BNO055_POWER_MODE_LOWPOWER          = 0x01,
-    BNO055_POWER_MODE_SUSPEND           = 0x02
+    BNO055_POWER_MODE_NORMAL   = 0x00,
+    BNO055_POWER_MODE_LOWPOWER = 0x01,
+    BNO055_POWER_MODE_SUSPEND  = 0x02
 } bno055_powermode_t;
 
-/* Quaternion structure */
+/* Operation modes */
+typedef enum {
+    BNO055_OPERATION_MODE_CONFIG        = 0x00,
+    BNO055_OPERATION_MODE_ACCONLY      = 0x01,
+    BNO055_OPERATION_MODE_MAGONLY      = 0x02,
+    BNO055_OPERATION_MODE_GYRONLY      = 0x03,
+    BNO055_OPERATION_MODE_ACCMAG       = 0x04,
+    BNO055_OPERATION_MODE_ACCGYRO      = 0x05,
+    BNO055_OPERATION_MODE_MAGGYRO      = 0x06,
+    BNO055_OPERATION_MODE_AMG          = 0x07,
+    BNO055_OPERATION_MODE_IMU          = 0x08,
+    BNO055_OPERATION_MODE_COMPASS      = 0x09,
+    BNO055_OPERATION_MODE_M4G          = 0x0A,
+    BNO055_OPERATION_MODE_NDOF_FMC_OFF = 0x0B,
+    BNO055_OPERATION_MODE_NDOF         = 0x0C
+} bno055_opmode_t;
+
+/* Data structures */
+typedef struct {
+    float x;
+    float y;
+    float z;
+} bno055_vector_t;
+
 typedef struct {
     float w;
     float x;
@@ -74,29 +173,29 @@ typedef struct {
     float z;
 } bno055_quaternion_t;
 
-/* Euler angles structure (in degrees or radians based on config) */
 typedef struct {
     float heading;  /* Yaw */
     float roll;
     float pitch;
 } bno055_euler_t;
 
-/* Vector structure */
 typedef struct {
-    float x;
-    float y;
-    float z;
-} bno055_vector_t;
-
-/* Calibration status */
-typedef struct {
-    uint8_t sys;    /* System calibration (0-3) */
-    uint8_t gyro;   /* Gyroscope calibration (0-3) */
-    uint8_t accel;  /* Accelerometer calibration (0-3) */
-    uint8_t mag;    /* Magnetometer calibration (0-3) */
+    uint8_t sys;
+    uint8_t gyro;
+    uint8_t accel;
+    uint8_t mag;
 } bno055_calibration_t;
 
-/* IMU data structure */
+/* Calibration offset structure */
+typedef struct {
+    int16_t accel_offset[3];
+    int16_t mag_offset[3];
+    int16_t gyro_offset[3];
+    int16_t accel_radius;
+    int16_t mag_radius;
+} bno055_offsets_t;
+
+/* Complete sensor data */
 typedef struct {
     bno055_quaternion_t quaternion;
     bno055_euler_t euler;
@@ -109,123 +208,33 @@ typedef struct {
 
 /* Configuration structure */
 typedef struct {
-    uint8_t address;                    /* I2C address */
-    bno055_opmode_t mode;              /* Operation mode */
-    bool use_external_crystal;          /* Use external crystal */
-    bool units_in_radians;             /* Euler angles in radians */
+    uint8_t address;
+    bno055_opmode_t mode;
+    bool use_external_crystal;
+    bool units_in_radians;
 } bno055_config_t;
 
-/**
- * @brief Initialize BNO055 driver
- * 
- * @param config Pointer to configuration structure
- * @return 0 on success, negative errno on failure
- */
+/* Function declarations */
 int bno055_init(const bno055_config_t *config);
-
-/**
- * @brief Set operation mode
- * 
- * @param mode Operation mode
- * @return 0 on success, negative errno on failure
- */
 int bno055_set_mode(bno055_opmode_t mode);
-
-/**
- * @brief Read quaternion data
- * 
- * @param quat Pointer to store quaternion data
- * @return 0 on success, negative errno on failure
- */
 int bno055_read_quaternion(bno055_quaternion_t *quat);
-
-/**
- * @brief Read Euler angles
- * 
- * @param euler Pointer to store Euler angles
- * @return 0 on success, negative errno on failure
- */
 int bno055_read_euler(bno055_euler_t *euler);
-
-/**
- * @brief Read gyroscope data
- * 
- * @param gyro Pointer to store gyroscope data (rad/s or deg/s)
- * @return 0 on success, negative errno on failure
- */
 int bno055_read_gyro(bno055_vector_t *gyro);
-
-/**
- * @brief Read accelerometer data
- * 
- * @param accel Pointer to store accelerometer data (m/s²)
- * @return 0 on success, negative errno on failure
- */
 int bno055_read_accel(bno055_vector_t *accel);
-
-/**
- * @brief Read magnetometer data
- * 
- * @param mag Pointer to store magnetometer data (µT)
- * @return 0 on success, negative errno on failure
- */
 int bno055_read_mag(bno055_vector_t *mag);
-
-/**
- * @brief Read all sensor data
- * 
- * @param data Pointer to store all sensor data
- * @return 0 on success, negative errno on failure
- */
 int bno055_read_all(bno055_data_t *data);
-
-/**
- * @brief Get calibration status
- * 
- * @param calib Pointer to store calibration status
- * @return 0 on success, negative errno on failure
- */
 int bno055_get_calibration(bno055_calibration_t *calib);
-
-/**
- * @brief Check if sensor is fully calibrated
- * 
- * @return true if fully calibrated (all values = 3)
- */
 bool bno055_is_fully_calibrated(void);
-
-/**
- * @brief Perform system reset
- * 
- * @return 0 on success, negative errno on failure
- */
 int bno055_reset(void);
-
-/**
- * @brief Check if BNO055 is ready
- * 
- * @return true if initialized and ready
- */
 bool bno055_is_ready(void);
-
-/**
- * @brief Get system status
- * 
- * @param sys_status Pointer to store system status
- * @param sys_error Pointer to store system error
- * @return 0 on success, negative errno on failure
- */
 int bno055_get_system_status(uint8_t *sys_status, uint8_t *sys_error);
-
-/**
- * @brief Perform self test
- * 
- * @return 0 on success, negative errno on failure
- */
 int bno055_self_test(void);
 
-#ifdef __cplusplus
-}
-#endif
+/* Enhanced calibration functions */
+int bno055_get_offsets(bno055_offsets_t *offsets);
+int bno055_set_offsets(const bno055_offsets_t *offsets);
+int bno055_save_calibration_profile(void);
+int bno055_load_calibration_profile(void);
+void bno055_enable_auto_calibration_save(bool enable);
 
 #endif /* BNO055_DRIVER_H */
