@@ -550,9 +550,7 @@ static void imu_thread(void *p1, void *p2, void *p3)
 static int system_init(void)
 {
     int err;
-    LOG_INF("╔══════════════════════════════════╗");
-    LOG_INF("║     Here is Haichao Zhao!        ║");
-    LOG_INF("╚══════════════════════════════════╝");
+    
     LOG_INF("╔════════════════════════════════════════╗");
     LOG_INF("║  Smart Retainer Initialization         ║");
     LOG_INF("║  IMU Mode (Accel + Gyro Only)          ║");
