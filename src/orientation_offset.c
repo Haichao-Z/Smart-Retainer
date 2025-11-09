@@ -196,7 +196,7 @@ int orientation_offset_set_zero_averaged(const bno055_quaternion_t *samples,
     int ret = bno055_get_calibration(&calib);
     if (ret == 0) {
         /* 只有在充分校准时才允许零位校准 */
-        if (calib.sys < 2 || calib.gyro < 2) {
+        if (calib.gyro < 2) {
             LOG_ERR("Cannot set zero point: insufficient calibration");
             return -EAGAIN;
         }

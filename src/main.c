@@ -195,9 +195,9 @@ static void display_calibration_status(const bno055_calibration_t *calib)
         LOG_INF("  ⚠️  Accel: Place device in 6 orientations (±X, ±Y, ±Z)");
         LOG_INF("      Hold each position for 2-3 seconds");
     }
-    if (calib->sys < 2) {
-        LOG_INF("  ⚠️  System calibration insufficient");
-    }
+    // if (calib->sys < 2) {
+    //     LOG_INF("  ⚠️  System calibration insufficient");
+    // }
 }
 
 /**

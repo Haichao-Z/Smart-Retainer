@@ -480,7 +480,7 @@ int bno055_read_quaternion(bno055_quaternion_t *quat)
                                      calib.accel < 2 || calib.mag < 2);
             } else {
                 /* IMU mode: only check gyro and accel */
-                calib_insufficient = (calib.sys < 2 || calib.gyro < 2 || calib.accel < 2);
+                calib_insufficient = (calib.gyro < 2 || calib.accel < 2);
             }
             
             if (calib_insufficient) {
@@ -730,7 +730,7 @@ bool bno055_is_fully_calibrated(void)
                 calib.accel == 3 && calib.mag == 3);
     } else {
         /* IMU mode: magnetometer not required */
-        return (calib.sys == 3 && calib.gyro == 3 && calib.accel == 3);
+        return (calib.gyro == 3 && calib.accel == 3);
     }
 }
 
